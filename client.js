@@ -1,7 +1,7 @@
 newMessage = function() {
     var url = "/message?ajax=true",
         xhr = new XMLHttpRequest();
-    var input = document.getElementById('input')
+    var input = document.getElementById('message-input')
     var message = input.value
     input.value = ""
     input.focus()
@@ -36,9 +36,9 @@ getMessages = function() {
                 let messages = JSON.parse(xhr.responseText)
                 var messageBody = "";
                 for (var i=0;i<messages.length;i++) {
-                    messageBody += messages[i].sender + " - " + messages[i].content + "<br>"
+                    messageBody += messages[i]
                 }
-                document.getElementById('messages').innerHTML = messageBody
+                document.getElementById('day_msgs').innerHTML = messageBody
             } else {
                 console.log('Error: ' + xhr.status);
             }

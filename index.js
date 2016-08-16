@@ -27,6 +27,13 @@ http.createServer(function (request, response) {
             response.end(content, 'utf-8');
         });
 
+	} else if (path === "/app.css") {
+
+		fs.readFile('./app.css', function(error, content) {
+            response.writeHead(200, { 'Content-Type': "text/css" });
+            response.end(content, 'utf-8');
+        });
+
 	} else if (path === "/messages") {
 
 		waiting.push((message) => {
@@ -43,7 +50,7 @@ http.createServer(function (request, response) {
 		response.writeHead(200, {
 			'Content-Type': 'application/json;',
 		});
-		response.end(JSON.stringify(messages), 'utf-8');
+		response.end(JSON.stringify(templates.messagesArray(messages)), 'utf-8');
 
 	} else if (path === "/is-new-message") {
 		console.log("is-new-message")

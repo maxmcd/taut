@@ -1,0 +1,311 @@
+* {
+	-ms-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+a {
+	text-decoration: none;
+}
+
+body {
+	height: 100%;
+	width: 100%;
+	min-width: 768px;
+	font-family: "Helvetica Neue",Helvetica,"Segoe UI",Tahoma,Arial,sans-serif;
+	-webkit-font-smoothing: antialiased;
+	font-size: 1rem;
+	line-height: 1rem;
+	background: #fff;
+	color: #555459;
+	padding: 0;
+	overflow-y: hidden;
+	overflow-x: hidden;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+#client-ui {
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	overflow: hidden;
+}
+header {
+	background: 0 0;
+	height: 3.3125rem;
+	position: fixed;
+	z-index: 200;
+	min-width: 768px;
+	width: 100%;
+}
+#team_menu {
+	font-family: Slack-Lato,appleLogo,sans-serif;
+	font-size: 1rem;
+	font-weight: 900;
+	padding: 0 1rem;
+	color: #fff;
+	height: 3.8125rem;
+	width: 220px;
+	line-height: 72px;
+	background: #4d394b;
+	border-bottom: 1px solid #4d394b;
+	float: left;
+	position: relative;
+	z-index: 50;
+}
+#channel_header {
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -moz-flex;
+	display: -ms-flexbox;
+	display: flex;
+	padding: .7rem 0 0;
+	margin: 0 0 0 220px;
+	height: 3.3125rem;
+	font-family: Slack-Lato,appleLogo,sans-serif;
+	z-index: 25;
+}
+
+#col_messages {
+	margin-left: 0;
+	position: relative;
+}
+
+.row-fluid {
+	width: 100%;
+}
+
+#message-form {
+	position: relative;
+	margin: 0;
+}
+
+#footer:not(.footer_msg_input) #primary_file_button {
+	left: -2.75rem;
+	min-height: 2.625rem!important;
+	height: 2.625rem;
+	max-height: 10rem!important;
+}
+
+#message-input-message {
+	text-align: center;
+	color: #a4a4a4;
+	display: none;
+	position: absolute;
+	height: 100%;
+	width: 100%;
+}
+
+#messages-input-container #message-input {
+	background: #fff;
+	width: 100%;
+	font-size: .9375rem;
+	line-height: 1.2rem;
+	border: 2px solid #E0E0E0;
+	border-left: none;
+	background-clip: padding-box;
+	font-family: Slack-Lato,appleLogo,sans-serif;
+	margin: 0;
+	color: #3d3c40;
+	-webkit-appearance: none;
+	box-shadow: none;
+	outline: 0;
+	position: absolute;
+	bottom: 0;
+	height: 100%;
+	min-height: 2.625rem!important;
+	padding-top: .5625rem;
+	padding-bottom: .5625rem;
+	padding-left: .5rem;
+	padding-right: 2.5rem;
+	max-height: 10rem!important;
+	resize: none!important;
+	-webkit-transition: none;
+	-moz-transition: none;
+	transition: none;
+	border-radius: 0 6px 6px 0;
+}
+
+#primary_file_button {
+	position: absolute;
+	bottom: 0;
+	width: 2.75rem;
+	padding: 0;
+	border: 2px solid #e0e0e0;
+	background: #fff;
+	color: rgba(0,0,0,.35);
+	line-height: 2.625rem;
+	text-shadow: none;
+	text-align: center;
+	-webkit-transition: background 50ms,color 50ms;
+	-moz-transition: background 50ms,color 50ms;
+	transition: background 50ms,color 50ms;
+	border-radius: 6px 0 0 6px;
+}
+
+#messages-input-container {
+	font-size: .9rem;
+	position: absolute;
+	bottom: 1.375rem;
+	left: 4rem;
+	right: .25rem;
+	padding-right: 1rem;
+	box-shadow: none;
+}
+
+#footer {
+	position: fixed;
+	bottom: 0;
+	left: 220px;
+	right: 1rem;
+	z-index: 52;
+}
+
+#footer:not(.footer_msg_input) {
+	height: 4rem;
+	background: #fff;
+}
+
+#client_body:before {
+	position: absolute;
+	z-index: 98;
+	left: 220px;
+	right: 0;
+	height: .4375rem;
+	border-bottom: .0625rem solid #e8e8e8;
+	background: #fff;
+	content: '';
+}
+
+#col_channels_bg {
+	height: auto;
+	height: 1800px;
+	background: #4D5250;
+	width: 220px;
+	top: 0;
+	left: 0;
+	position: absolute;
+	bottom: -3rem;
+}
+
+#msgs_scroller_div {
+	height: 661px;
+}
+
+#col_channels {
+	background: #4d394b;
+	color: #ab9ba9;
+	width: 220px;
+	float: left;
+	position: relative;
+	font-family: Slack-Lato,appleLogo,sans-serif;
+	top: .5rem;
+}
+
+#client_body {
+	margin-top: 3.3125rem;
+}
+
+#messages_container {
+	overflow-y: hidden;
+	position: relative;
+	margin-left: 220px;
+}
+
+ts-message .message_gutter {
+	width: 4.5rem;
+	padding-right: .625rem;
+}
+ts-message .message_gutter {
+	text-align: right;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+ts-message .timestamp {
+	color: #9e9ea6;
+	font-size: .75rem;
+}
+
+ts-message.first .message_body, ts-message.selected .message_body {
+	margin-top: -.125rem;
+}
+
+ts-message .message_content .member {
+	font-weight: 900;
+	color: #2c2d30!important;
+	line-height: 1.125rem;
+}
+
+.message_icon {
+	margin-top: .25rem;
+	display: block;
+}
+
+.member_image {
+	border-radius: .2rem;
+	background-size: 100%;
+	background-repeat: no-repeat;
+	display: inline-block;
+	position: relative;
+}
+
+.member_image.thumb_36 {
+	width: 2.25rem;
+	height: 2.25rem;
+}
+
+ts-message .message_body {
+	display: block;
+}
+ts-message .message_body {
+	cursor: text;
+}
+
+ts-message.first .message_content, ts-message.selected .message_content {
+	margin-top: .0625rem;
+}
+
+ts-message .message_content {
+	margin-left: 4.5rem;
+}
+
+.day_container .day_msgs {
+	margin: -18px 0 0;
+	padding: 1.75rem 0 1.25rem;
+	border-top: 1px solid #e8e8e8;
+}
+
+.day_container {
+	position: relative;
+}
+
+ts-message {
+	display: block;
+	width: 100%;
+	margin: 0 auto -.0625rem;
+	position: relative;
+	padding-top: .0625rem;
+	padding-bottom: .125rem;
+	padding-left: 0;
+	padding-right: 2.5rem;
+	border-left: none;
+	border-right: none;
+	border-top: 1px solid rgba(0, 0, 0, 0);
+	border-bottom: 1px solid rgba(0, 0, 0, 0);
+	font-family: Slack-Lato,appleLogo,sans-serif;
+	color: #2c2d30;
+	font-size: .9375rem;
+	line-height: 1.375rem;
+	-webkit-user-select: text;
+	-moz-user-select: text;
+	-ms-user-select: text;
+	user-select: text;
+	word-wrap: break-word;
+}
