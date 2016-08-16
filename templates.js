@@ -90,6 +90,7 @@ module.exports = {
 			messageBody += messages[i].sender + " - " + messages[i].content + "<br>"
 		}
 		return getHtml(messageBody, `
+			<link rel="stylesheet" href="/app.css" />
 			<!-- <noscript> -->
 			<meta http-equiv="refresh" content="0; ?id=${Math.random()}" />
 			<!-- </noscript> -->
