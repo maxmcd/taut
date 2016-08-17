@@ -2,12 +2,43 @@ const http = require('http');
 const url = require('url');
 const fs = require('fs');
 const querystring = require('querystring');
+const crypto = require('crypto');
 
 const templates = require('./templates')
 
 const waiting = [];
+const ppl = {};
 const messages = [{sender: "max", content: "default"}];
 
+
+let getNic = (request) => {
+	var parts =  ("; " + request.headers.cookie).split("; nic=");
+	if (parts.length == 2) return parts.pop().split(";").shift();
+}
+let nicResponse = (nic, response, paramsm, taken) => {
+	if (nic) {
+		ppl[nic] = new Date().getTime()
+		response.end(templates.index(params.noscript), 'utf-8');
+	} else {
+		response.end(templates.form(taken), 'utf-8');
+	}
+}
+function onlyUnique(value, index, self) { 
+    return self.indexOf(value) === index;
+}
+
+let people = () => {
+	let nPpl = [];
+	let d = new Date().getTime() - 300000 //5min
+	for (let key in ppl) {
+		if (ppl[key] > d) {
+			nPpl.push(key)
+		} else {
+			delete ppl[key]
+		}
+	}
+	return nPpl
+}
 http.createServer(function (request, response) {
 	console.log('request starting...');
 
@@ -15,10 +46,23 @@ http.createServer(function (request, response) {
 	let path = urlParts.pathname;
 	let params = urlParts.query;
 
+
 	if (path === "/") {
 
-		response.writeHead(200, {'Content-Type': 'text/html'});
-		response.end(templates.index(params.noscript), 'utf-8');
+		if (request.method == "POST") {
+			request.on('data', (body) => {
+				let nic = body.toString('utf8').replace("nic=", "")
+				response.writeHead(200, {
+					'Content-Type': 'text/html',
+					'Set-Cookie':`nic=${nic}`,
+				});
+				nicResponse(nic, response, params)
+			})
+		} else {
+			response.writeHead(200, {'Content-Type': 'text/html'});
+			let nic = getNic(request)
+			nicResponse(nic, response, params)
+		}
 
 	} else if (path === "/client.js") {
 
@@ -36,9 +80,9 @@ http.createServer(function (request, response) {
 
 	} else if (path === "/messages") {
 
-		waiting.push((message) => {
+		waiting.push([(message) => {
 			response.end(`<br>${message}`);
-		});
+		}, getNic(request)]);
 
 		response.writeHead(200, {
 			'Content-Type': 'text/html;',
@@ -50,28 +94,34 @@ http.createServer(function (request, response) {
 		response.writeHead(200, {
 			'Content-Type': 'application/json;',
 		});
-		response.end(JSON.stringify(templates.messagesArray(messages)), 'utf-8');
+		let data = {
+			msgs: templates.messagesArray(messages),
+			people: templates.ppls(people()),
+		}
+		response.end(JSON.stringify(data), 'utf-8');
 
 	} else if (path === "/is-new-message") {
 		console.log("is-new-message")
-		waiting.push(() => {
+		waiting.push([() => {
 			response.end("yes");
-		});
+		}, getNic(request)]);
 		console.log(waiting)
 
 	} else if (path === "/message") {
 		request.on('data', (body) => {
 
 			let bodyParams = querystring.parse(body.toString('utf8'))
-			console.log(bodyParams)
+
+			ppl[getNic(request)] = new Date().getTime()
+
 			messages.push({
-				sender: "max",
+				sender: getNic(request),
 				content: bodyParams.message,
 			})
 
 			console.log(waiting)
 			while (waiting.length) {
-				waiting.pop()(body)
+				waiting.pop()[0](body)
 				console.log('triggered')
 			}
 

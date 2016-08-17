@@ -1,0 +1,1 @@
+ls -lrt | egrep '(js|css)' | awk '{ total += $5 }; END { print total }'

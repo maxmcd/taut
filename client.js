@@ -43,7 +43,12 @@ getMessages = function() {
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
-                let messages = JSON.parse(xhr.responseText)
+                let data = JSON.parse(xhr.responseText)
+                let messages = data.msgs
+
+                let ppl = data.people
+                document.getElementById('im-list').innerHTML = ppl.join("")
+
                 var messageBody = "";
                 for (var i=0;i<messages.length;i++) {
                     messageBody += messages[i]

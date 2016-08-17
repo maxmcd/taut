@@ -56,7 +56,7 @@ module.exports = {
 								<i class="ts_icon ts_icon_plus_thick"></i>
 							</a>
 							<form action="/message" method="post" id="message-form" style="height: 42px;" onsubmit="newMessage(); return false;">
-								<input id="message-input" class="with-emoji-menu" aria-label="Message input for Channel #general" data-qa="message_input" autocorrect="off" autocomplete="off" spellcheck="true" style="overflow-y: hidden; height: 42px;" />
+								<input autofocus id="message-input" class="with-emoji-menu" aria-label="Message input for Channel #general" data-qa="message_input" autocorrect="off" autocomplete="off" spellcheck="true" style="overflow-y: hidden; height: 42px;" />
 								<div id="message-input-message" class=""><span></span></div>
 							</form>
 						</div>
@@ -68,12 +68,6 @@ module.exports = {
 							<div id="col_channels_bg"></div>
 							<div id="col_channels">
 								<ul id="im-list">
-									<li>
-										<span class="presence active">
-											<i class="presence_icon"></i>
-										</span>
-										max
-									</li>
 								</ul>
 							</div>
 							<div id="messages_container">
@@ -97,6 +91,25 @@ module.exports = {
 			</div>
 		`
 		return getHtml(body, header)
+	},
+	ppls(peoples) {
+		return peoples.map((ppl) => {
+			return `<li>
+				<span class="presence active">
+					<i class="presence_icon"></i>
+				</span>
+				${ppl}
+			</li>`
+		})	
+	},
+	form() {
+		return getHtml(`
+			<form method="post">
+				<p>Enter a nickname:</p>
+				<input type="text" name="nic">
+				<input type="submit" />
+			</form>
+		`)
 	},
 	messages(messages) {
 		var messageBody = "";
@@ -126,7 +139,6 @@ module.exports = {
 			.replace(/</g, '&lt;').replace(/>/g, '&gt;')
 		for (let key in this.rpl) {
 			let re = new RegExp(`(\\s?)${key}(\\w+)${key}($|\\s)`,"gi");
-			console.log(re)
 			content = content.replace(
 				re, 
 				`$1<${this.rpl[key]}>$2</${this.rpl[key]}>`
