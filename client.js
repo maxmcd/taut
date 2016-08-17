@@ -3,6 +3,7 @@ newMessage = function() {
         xhr = new XMLHttpRequest();
     var input = document.getElementById('message-input')
     var message = input.value
+    if (!message) return ;
     input.value = ""
     input.focus()
     var body = "message=" + encodeURIComponent(message)
@@ -21,6 +22,17 @@ checkIsNewMessage = function() {
         getMessages()
         checkIsNewMessage()
     }
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+            } else {
+                setTimeout(function() {
+                    checkIsNewMessage()                    
+                }, 500)
+            }
+        }
+    }
+
     xhr.send();
 }
 
@@ -29,16 +41,22 @@ getMessages = function() {
         xhr = new XMLHttpRequest();
     xhr.open("GET", url);
     xhr.onreadystatechange = function() {
-        var DONE = 4; 
-        var OK = 200; 
-        if (xhr.readyState === DONE) {
-            if (xhr.status === OK) {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
                 let messages = JSON.parse(xhr.responseText)
                 var messageBody = "";
                 for (var i=0;i<messages.length;i++) {
                     messageBody += messages[i]
                 }
                 document.getElementById('day_msgs').innerHTML = messageBody
+                var x = document.getElementsByClassName("timestamp");
+                for (var i=0;i<x.length;i++) {
+                    var d = new Date(Number(x[i].getAttribute('data-ts')))
+                    var h = d.getHours();
+                    var ap = h > 12 ? "PM":"AM";
+                    var h = h > 12 ? h-12 : h;
+                    x[i].innerHTML = h+":"+d.getMinutes()+" "+ap
+                }
             } else {
                 console.log('Error: ' + xhr.status);
             }

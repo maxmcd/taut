@@ -12,18 +12,30 @@ a {
 body {
 	height: 100%;
 	width: 100%;
-	min-width: 768px;
 	font-family: "Helvetica Neue",Helvetica,"Segoe UI",Tahoma,Arial,sans-serif;
 	-webkit-font-smoothing: antialiased;
-	font-size: 1rem;
-	line-height: 1rem;
 	background: #fff;
 	color: #555459;
 	padding: 0;
-	overflow-y: hidden;
-	overflow-x: hidden;
-	user-select: none;
+	overflow: hidden;
 }
+
+code {
+    padding: 0 3px 2px;
+    font-family: Monaco,Menlo,Consolas,"Courier New",monospace;
+    font-size: 12px;
+    line-height: 12px;
+    color: #333;
+    border-radius: 3px;
+    white-space: normal;
+    color: #c25;
+    background-color: #f7f7f9;
+    border: 1px solid #e1e1e8;
+    padding: 1px 3px;
+    -webkit-font-variant-ligatures: none;
+    font-variant-ligatures: none;
+}
+
 #client-ui {
 	position: absolute;
 	top: 0;
@@ -41,26 +53,92 @@ header {
 	width: 100%;
 }
 #team_menu {
-	font-family: Slack-Lato,appleLogo,sans-serif;
 	font-size: 1rem;
 	font-weight: 900;
 	padding: 0 1rem;
 	color: #fff;
 	height: 3.8125rem;
 	width: 220px;
-	line-height: 72px;
+	line-height: 58px;
 	background: #4d394b;
 	border-bottom: 1px solid #4d394b;
 	float: left;
 	position: relative;
 	z-index: 50;
 }
+
+#im-list {
+    list-style-type: none;
+    text-align: left;
+    color: #fff;
+    opacity: 0.6;
+    margin: 0 1px 0 0;
+    width: 204px;
+}
+
+.presence {
+    width: .5625rem;
+    height: .5625rem;
+    margin: 0 .15rem;
+    display: inline-block;
+    vertical-align: baseline;
+    background: 0 0;
+    position: relative;
+    color: #555459;
+}
+
+.presence i.presence_icon {
+    display: inline-block;
+    font-size: 1.25rem;
+    color: #99D04A;
+    line-height: 1.25rem;
+    position: absolute;
+    top: -.625rem;
+    left: -.3125rem;
+}
+i.presence_icon:before {
+    content: '\E506';
+}
+
+.presence.active {
+    color: #38978D;
+}
+
+#im-list li {
+    font-size: 1rem;
+    line-height: 1.5rem;
+    height: 1.5rem;
+    margin-right: 1px;
+    position: relative;
+    clear: both;
+}
+
+#channel_header_info {
+    margin-top: 3px;
+    padding-left: 1.3rem;
+    background: #fff;
+    color: #9e9ea6;
+    font-size: .8125rem;
+    font-weight: 400;
+    line-height: 1.16;
+}
+
+#channel_title {
+    padding: 0 .1rem 0 1.3rem;
+    color: #2c2d30;
+    font-weight: 900;
+    font-size: 1.125rem;
+    line-height: 1.375rem;
+    z-index: 25;
+}
+
+#team_menu #team_name {
+    font-size: 1.125rem;
+    line-height: 1.375rem;
+    max-width: 9.12rem;
+}
+
 #channel_header {
-	display: -webkit-box;
-	display: -webkit-flex;
-	display: -moz-flex;
-	display: -ms-flexbox;
-	display: flex;
 	padding: .7rem 0 0;
 	margin: 0 0 0 220px;
 	height: 3.3125rem;
@@ -116,15 +194,8 @@ header {
 	bottom: 0;
 	height: 100%;
 	min-height: 2.625rem!important;
-	padding-top: .5625rem;
-	padding-bottom: .5625rem;
-	padding-left: .5rem;
-	padding-right: 2.5rem;
+	padding: .5625rem 2.5rem .5625rem .5rem;
 	max-height: 10rem!important;
-	resize: none!important;
-	-webkit-transition: none;
-	-moz-transition: none;
-	transition: none;
 	border-radius: 0 6px 6px 0;
 }
 
@@ -137,11 +208,6 @@ header {
 	background: #fff;
 	color: rgba(0,0,0,.35);
 	line-height: 2.625rem;
-	text-shadow: none;
-	text-align: center;
-	-webkit-transition: background 50ms,color 50ms;
-	-moz-transition: background 50ms,color 50ms;
-	transition: background 50ms,color 50ms;
 	border-radius: 6px 0 0 6px;
 }
 
@@ -195,7 +261,7 @@ header {
 }
 
 #col_channels {
-	background: #4d394b;
+	background: #4D5250;
 	color: #ab9ba9;
 	width: 220px;
 	float: left;
@@ -236,7 +302,7 @@ ts-message.first .message_body, ts-message.selected .message_body {
 
 ts-message .message_content .member {
 	font-weight: 900;
-	color: #2c2d30!important;
+	color: #2c2d30;
 	line-height: 1.125rem;
 }
 
@@ -278,6 +344,7 @@ ts-message .message_content {
 	padding: 1.75rem 0 1.25rem;
 	border-top: 1px solid #e8e8e8;
 }
+.
 
 .day_container {
 	position: relative;
@@ -288,21 +355,19 @@ ts-message {
 	width: 100%;
 	margin: 0 auto -.0625rem;
 	position: relative;
-	padding-top: .0625rem;
-	padding-bottom: .125rem;
-	padding-left: 0;
-	padding-right: 2.5rem;
+	padding-top: .0625rem 2.5rem .125rem 0;
 	border-left: none;
 	border-right: none;
 	border-top: 1px solid rgba(0, 0, 0, 0);
 	border-bottom: 1px solid rgba(0, 0, 0, 0);
-	font-family: Slack-Lato,appleLogo,sans-serif;
 	color: #2c2d30;
 	font-size: .9375rem;
 	line-height: 1.375rem;
-	-webkit-user-select: text;
-	-moz-user-select: text;
-	-ms-user-select: text;
-	user-select: text;
 	word-wrap: break-word;
+}
+
+@media (min-width: 550px) {
+  .facet_sidebar {
+    display: none;
+  }
 }

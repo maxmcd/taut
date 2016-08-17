@@ -41,8 +41,13 @@ module.exports = {
 		body += `
 			<div id="client-ui">
 				<header>
-					<div id="team_menu"></div>
-					<div id="channel_header"></div>
+					<div id="team_menu">
+						<span id="team_name">S10ck</span>
+					</div>
+					<div id="channel_header">
+						<div id="channel_title">#general</div>
+						<div id="channel_header_info">0 members</div>
+					</div>
 				</header>
 				<div id="footer">
 					<div id="footer_msgs">
@@ -61,12 +66,21 @@ module.exports = {
 					<div id="col_messages">
 						<div class="row-fluid">
 							<div id="col_channels_bg"></div>
-							<div id="col_channels"></div>
+							<div id="col_channels">
+								<ul id="im-list">
+									<li>
+										<span class="presence active">
+											<i class="presence_icon"></i>
+										</span>
+										max
+									</li>
+								</ul>
+							</div>
 							<div id="messages_container">
 								<div id="msgs_scroller_div">
 									<div id="msg_div">
-										<div id="day_container">
-											<div id="day_msgs">
+										<div class="day_container">
+											<div class="day_msgs" id="day_msgs">
 											</div>
 										</div>
 									</div>
@@ -103,9 +117,22 @@ module.exports = {
 		}
 		return out
 	},
+	rpl: {
+		"\\*":"b","_":"i","~":"strike","`":"code"
+	},
 	message(message) {
 		let sender = message.sender;
-		let content = message.content;
+		let content = message.content
+			.replace(/</g, '&lt;').replace(/>/g, '&gt;')
+		for (let key in this.rpl) {
+			let re = new RegExp(`(\\s?)${key}(\\w+)${key}($|\\s)`,"gi");
+			console.log(re)
+			content = content.replace(
+				re, 
+				`$1<${this.rpl[key]}>$2</${this.rpl[key]}>`
+			)
+		}
+
 		// TODO: sanitize html
 		return `
 			<ts-message class="message feature_fix_files first">
@@ -116,7 +143,7 @@ module.exports = {
 				</div>
 				<div class="message_content ">
 					<a href="/team/" target="/team/" class="message_sender member member_preview_link color_U03281YPL color_e96699 " data-member-id="U03281YPL">${sender}</a>
-					<a href="/archives/general/p1471282235000016" target="new_1471308748387" class="timestamp ts_tip ts_tip_top ts_tip_float ts_tip_hidden ts_tip_multiline ts_tip_delay_300"><span class="ts_tip_tip"><span class="subtle_silver">Today&nbsp;at&nbsp;1:30:35&nbsp;PM</span></span></a>
+					<span class="timestamp" data-ts="${new Date().getTime()}"></span>
 					<span class="message_body">${content}</span>
 				</div>
 			</ts-message>
