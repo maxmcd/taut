@@ -1,4 +1,4 @@
-newMessage = function() {
+var newMessage = function() {
     var url = "/message?ajax=true",
         xhr = new XMLHttpRequest();
     var input = document.getElementById('message-input')
@@ -13,7 +13,7 @@ newMessage = function() {
     return false;
 }
 
-checkIsNewMessage = function() {
+var checkIsNewMessage = function() {
     console.log("waiting for a new message")
     var url = "/is-new-message?" + Math.random(),
         xhr = new XMLHttpRequest();
@@ -37,7 +37,7 @@ checkIsNewMessage = function() {
     xhr.send();
 }
 
-getMessages = function() {
+var getMessages = function() {
     var url = "/messages.json",
         xhr = new XMLHttpRequest();
     xhr.open("GET", url);

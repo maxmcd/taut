@@ -15,7 +15,8 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "babel index.js"
+    "start": "nodemon index.js",
+    "start-built": "cd build;node index.js"
   },
   "repository": {
     "type": "git",
