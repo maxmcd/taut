@@ -41,8 +41,24 @@ let people = () => {
 	}
 	return nPpl
 }
+
+let serveAsset = (resp, filename) => {
+	fs.readFile(`./${filename}.gz`, function(error, content) {
+		if (error) {
+			fs.readFile(`./${filename}`, function(error, content) {
+        		resp.writeHead(200, { 'Content-Type': "text/css" });
+        		resp.end(content, 'utf-8');
+    		});
+		} else {
+			resp.writeHead(200, { 
+				'Content-Type': "text/css",
+				'content-encoding':'gzip',
+			});
+    		resp.end(content, 'utf-8');
+		}
+	})
+}
 http.createServer(function (req, resp) {
-	console.log('req starting...');
 
 	let urlParts = url.parse(req.url, true);
 	let path = urlParts.pathname;
@@ -66,19 +82,9 @@ http.createServer(function (req, resp) {
 		}
 
 	} else if (path === "/client.js") {
-
-		fs.readFile('./client.js', function(error, content) {
-            resp.writeHead(200, { 'Content-Type': "text/javascript" });
-            resp.end(content, 'utf-8');
-        });
-
+		serveAsset(resp, 'client.js')
 	} else if (path === "/app.css") {
-
-		fs.readFile('./app.css', function(error, content) {
-            resp.writeHead(200, { 'Content-Type': "text/css" });
-            resp.end(content, 'utf-8');
-        });
-
+		serveAsset(resp, 'app.css')
 	} else if (path === "/messages") {
 
 		waiting.push([(message) => {
