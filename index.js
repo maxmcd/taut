@@ -6,21 +6,23 @@ const crypto = require('crypto');
 
 const templates = require('./templates')
 
+const port = 8125
+
 const waiting = [];
 const ppl = {};
 const messages = [{sender: "max", content: "default"}];
 
 
-let getNic = (request) => {
-	var parts =  ("; " + request.headers.cookie).split("; nic=");
+let getNic = (req) => {
+	var parts =  ("; " + req.headers.cookie).split("; nic=");
 	if (parts.length == 2) return parts.pop().split(";").shift();
 }
-let nicResponse = (nic, response, paramsm, taken) => {
+let nicResponse = (nic, resp, params, taken) => {
 	if (nic) {
 		ppl[nic] = new Date().getTime()
-		response.end(templates.index(params.noscript), 'utf-8');
+		resp.end(templates.index(params.noscript, Object.keys(ppl).length), 'utf-8');
 	} else {
-		response.end(templates.form(taken), 'utf-8');
+		resp.end(templates.form(taken), 'utf-8');
 	}
 }
 function onlyUnique(value, index, self) { 
@@ -39,105 +41,104 @@ let people = () => {
 	}
 	return nPpl
 }
-http.createServer(function (request, response) {
-	console.log('request starting...');
+http.createServer(function (req, resp) {
+	console.log('req starting...');
 
-	let urlParts = url.parse(request.url, true);
+	let urlParts = url.parse(req.url, true);
 	let path = urlParts.pathname;
 	let params = urlParts.query;
 
-
 	if (path === "/") {
 
-		if (request.method == "POST") {
-			request.on('data', (body) => {
-				let nic = body.toString('utf8').replace("nic=", "")
-				response.writeHead(200, {
+		if (req.method == "POST") {
+			req.on('data', (body) => {
+				let nic = decodeURIComponent(body.toString('utf8').replace("nic=", ""))
+				resp.writeHead(200, {
 					'Content-Type': 'text/html',
 					'Set-Cookie':`nic=${nic}`,
 				});
-				nicResponse(nic, response, params)
+				nicResponse(nic, resp, params)
 			})
 		} else {
-			response.writeHead(200, {'Content-Type': 'text/html'});
-			let nic = getNic(request)
-			nicResponse(nic, response, params)
+			resp.writeHead(200, {'Content-Type': 'text/html'});
+			let nic = getNic(req)
+			nicResponse(nic, resp, params)
 		}
 
 	} else if (path === "/client.js") {
 
 		fs.readFile('./client.js', function(error, content) {
-            response.writeHead(200, { 'Content-Type': "text/javascript" });
-            response.end(content, 'utf-8');
+            resp.writeHead(200, { 'Content-Type': "text/javascript" });
+            resp.end(content, 'utf-8');
         });
 
 	} else if (path === "/app.css") {
 
 		fs.readFile('./app.css', function(error, content) {
-            response.writeHead(200, { 'Content-Type': "text/css" });
-            response.end(content, 'utf-8');
+            resp.writeHead(200, { 'Content-Type': "text/css" });
+            resp.end(content, 'utf-8');
         });
 
 	} else if (path === "/messages") {
 
 		waiting.push([(message) => {
-			response.end(`<br>${message}`);
-		}, getNic(request)]);
+			resp.end(`<br>${message}`);
+		}, getNic(req)]);
 
-		response.writeHead(200, {
+		resp.writeHead(200, {
 			'Content-Type': 'text/html;',
 		});
-		response.write(templates.messages(messages), 'utf-8');
+		resp.write(templates.messages(messages), 'utf-8');
 
 	} else if (path === "/messages.json") {
 
-		response.writeHead(200, {
+		resp.writeHead(200, {
 			'Content-Type': 'application/json;',
 		});
 		let data = {
 			msgs: templates.messagesArray(messages),
 			people: templates.ppls(people()),
 		}
-		response.end(JSON.stringify(data), 'utf-8');
+		resp.end(JSON.stringify(data), 'utf-8');
 
 	} else if (path === "/is-new-message") {
-		console.log("is-new-message")
+
 		waiting.push([() => {
-			response.end("yes");
-		}, getNic(request)]);
-		console.log(waiting)
+			resp.end("yes");
+		}, getNic(req)]);
 
 	} else if (path === "/message") {
-		request.on('data', (body) => {
+
+
+		req.on('data', (body) => {
 
 			let bodyParams = querystring.parse(body.toString('utf8'))
 
-			ppl[getNic(request)] = new Date().getTime()
+			ppl[getNic(req)] = new Date().getTime()
 
 			messages.push({
-				sender: getNic(request),
+				sender: getNic(req),
 				content: bodyParams.message,
 			})
 
-			console.log(waiting)
 			while (waiting.length) {
 				waiting.pop()[0](body)
-				console.log('triggered')
 			}
 
 			if (params.ajax) {
-				response.writeHead(200);
+				resp.writeHead(200);
 			} else {
-				response.writeHead(302, {
+				resp.writeHead(302, {
 					'Location':'/'
 				});
 			}
 
-			response.end('');
+			resp.end('');
   		})
+
 	} else {
-		response.writeHead(404);
-		response.end("404", 'utf-8');
+		resp.writeHead(404);
+		resp.end("404", 'utf-8');
 	}
-}).listen(8125);
-console.log('Server running at http://127.0.0.1:8125/');
+}).listen(port);
+console.log(`Server running on port ${port}`);

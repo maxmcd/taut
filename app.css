@@ -19,21 +19,21 @@ body {
 	padding: 0;
 	overflow: hidden;
 }
+body.iframe {
+	overflow-y: scroll
+}
 
 code {
     padding: 0 3px 2px;
     font-family: Monaco,Menlo,Consolas,"Courier New",monospace;
     font-size: 12px;
     line-height: 12px;
-    color: #333;
     border-radius: 3px;
     white-space: normal;
     color: #c25;
     background-color: #f7f7f9;
     border: 1px solid #e1e1e8;
     padding: 1px 3px;
-    -webkit-font-variant-ligatures: none;
-    font-variant-ligatures: none;
 }
 
 #client-ui {
@@ -72,7 +72,7 @@ header {
     text-align: left;
     color: #fff;
     opacity: 0.6;
-    margin: 0 1px 0 0;
+    margin: 10px 1px 0 0;
     width: 204px;
 }
 
@@ -84,24 +84,8 @@ header {
     vertical-align: baseline;
     background: 0 0;
     position: relative;
-    color: #555459;
-}
-
-.presence i.presence_icon {
-    display: inline-block;
-    font-size: 1.25rem;
-    color: #99D04A;
-    line-height: 1.25rem;
-    position: absolute;
-    top: -.625rem;
-    left: -.3125rem;
-}
-i.presence_icon:before {
-    content: '\E506';
-}
-
-.presence.active {
-    color: #38978D;
+    background-color: #99D04A;
+    border-radius: 100%;
 }
 
 #im-list li {
@@ -158,25 +142,11 @@ i.presence_icon:before {
 #message-form {
 	position: relative;
 	margin: 0;
-}
-
-#footer:not(.footer_msg_input) #primary_file_button {
-	left: -2.75rem;
-	min-height: 2.625rem!important;
-	height: 2.625rem;
-	max-height: 10rem!important;
-}
-
-#message-input-message {
-	text-align: center;
-	color: #a4a4a4;
-	display: none;
-	position: absolute;
-	height: 100%;
-	width: 100%;
+	height: 42px;
 }
 
 #messages-input-container #message-input {
+	height: 42px;
 	background: #fff;
 	width: 100%;
 	font-size: .9375rem;
@@ -187,7 +157,6 @@ i.presence_icon:before {
 	font-family: Slack-Lato,appleLogo,sans-serif;
 	margin: 0;
 	color: #3d3c40;
-	-webkit-appearance: none;
 	box-shadow: none;
 	outline: 0;
 	position: absolute;
@@ -200,8 +169,13 @@ i.presence_icon:before {
 }
 
 #primary_file_button {
+	left: -2.75rem;
+	min-height: 2.625rem!important;
+	height: 2.625rem;
+	max-height: 10rem!important;
 	position: absolute;
 	bottom: 0;
+	height: 42px;
 	width: 2.75rem;
 	padding: 0;
 	border: 2px solid #e0e0e0;
@@ -256,10 +230,6 @@ i.presence_icon:before {
 	bottom: -3rem;
 }
 
-#msgs_scroller_div {
-	height: 661px;
-}
-
 #col_channels {
 	background: #4D5250;
 	color: #ab9ba9;
@@ -270,14 +240,29 @@ i.presence_icon:before {
 	top: .5rem;
 }
 
-#client_body {
-	margin-top: 3.3125rem;
+#col_messages, .row-fluid, #messages_container {
+	height: 100%;
 }
 
-#messages_container {
-	overflow-y: hidden;
-	position: relative;
-	margin-left: 220px;
+#client_body {
+	margin-top: 3.3125rem;
+    position: fixed;
+    width: 100%;
+    bottom: 70px;
+    height: 100%;
+    top: 0px;
+}
+
+#messages_container, iframe {
+    overflow-y: scroll;
+    position: relative;
+    margin-left: 220px;
+    padding-bottom: 140px;
+    height: 100%;
+    display: block;
+}
+iframe {
+	width: 100%;
 }
 
 ts-message .message_gutter {
@@ -296,11 +281,7 @@ ts-message .timestamp {
 	font-size: .75rem;
 }
 
-ts-message.first .message_body, ts-message.selected .message_body {
-	margin-top: -.125rem;
-}
-
-ts-message .message_content .member {
+ts-message .member {
 	font-weight: 900;
 	color: #2c2d30;
 	line-height: 1.125rem;
@@ -317,25 +298,33 @@ ts-message .message_content .member {
 	background-repeat: no-repeat;
 	display: inline-block;
 	position: relative;
-}
 
-.member_image.thumb_36 {
+	background-color: pink;
+
+	color: transparent;
+
+	/* thumb_36 */
+
 	width: 2.25rem;
 	height: 2.25rem;
+	
+	/*
+	background-image: url('https://avatars.slack-edge.com/2015-10-19/12818173283_aea3b0bbf30420da2fce_72.jpg')
+	*/
 }
 
 ts-message .message_body {
 	display: block;
-}
-ts-message .message_body {
 	cursor: text;
-}
 
-ts-message.first .message_content, ts-message.selected .message_content {
-	margin-top: .0625rem;
+	/* just when every message shows an avatar */
+
+	margin-top: -.125rem;
+
 }
 
 ts-message .message_content {
+	margin-top: .0625rem;
 	margin-left: 4.5rem;
 }
 
@@ -344,7 +333,6 @@ ts-message .message_content {
 	padding: 1.75rem 0 1.25rem;
 	border-top: 1px solid #e8e8e8;
 }
-.
 
 .day_container {
 	position: relative;
@@ -367,7 +355,7 @@ ts-message {
 }
 
 @media (min-width: 550px) {
-  .facet_sidebar {
-    display: none;
-  }
+  	.facet_sidebar {
+   		display: none;
+  	}
 }

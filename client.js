@@ -10,6 +10,7 @@ newMessage = function() {
     xhr.open("POST", url);
     xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xhr.send(body);
+    return false;
 }
 
 checkIsNewMessage = function() {
@@ -62,6 +63,8 @@ getMessages = function() {
                     var h = h > 12 ? h-12 : h;
                     x[i].innerHTML = h+":"+d.getMinutes()+" "+ap
                 }
+                var mc = document.getElementById("messages_container");
+                mc.scrollTop = mc.scrollHeight;
             } else {
                 console.log('Error: ' + xhr.status);
             }
