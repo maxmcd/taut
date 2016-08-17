@@ -99,6 +99,7 @@ http.createServer(function (req, resp) {
 			msgs: templates.messagesArray(messages),
 			people: templates.ppls(people()),
 		}
+		
 		resp.end(JSON.stringify(data), 'utf-8');
 
 	} else if (path === "/is-new-message") {
@@ -108,6 +109,7 @@ http.createServer(function (req, resp) {
 		}, getNic(req)]);
 
 	} else if (path === "/message") {
+
 
 
 		req.on('data', (body) => {
