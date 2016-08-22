@@ -1,12 +1,11 @@
 {
-  "name": "s10ck",
+  "name": "Taut",
   "version": "1.0.0",
   "description": "My submission for the [10k Apart Challenge](https://a-k-apart.com/). A slack clone in 10k of js/html/css that works well in all modern browsers and without clientside javascript.",
   "main": "index.js",
   "dependencies": {},
   "devDependencies": {
     "babel-cli": "^6.11.4",
-    "babel-plugin-uglify": "^1.0.2",
     "babel-preset-es2015": "^6.13.2",
     "gulp": "^3.9.1",
     "gulp-babel": "^6.1.2",
@@ -21,12 +20,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/maxmcd/s10ck.git"
+    "url": "git+https://github.com/maxmcd/taut.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/maxmcd/s10ck/issues"
+    "url": "https://github.com/maxmcd/taut/issues"
   },
-  "homepage": "https://github.com/maxmcd/s10ck#readme"
+  "homepage": "https://github.com/maxmcd/taut#readme"
 }

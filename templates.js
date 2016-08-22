@@ -7,7 +7,7 @@ const getHtml = (body, header) => {
 	<html lang="en">
 	<head>
 		<meta charset="UTF-8">
-		<title>S10ck</title>
+		<title>Taut</title>
 		${header}
 	</head>
 	${body}
@@ -50,7 +50,7 @@ module.exports = {
 			<div id="client-ui">
 				<header>
 					<div id="team_menu">
-						<span id="team_name">S10ck</span>
+						<span id="team_name">Taut</span>
 					</div>
 					<div id="channel_header">
 						<div id="channel_title">#general</div>
