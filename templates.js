@@ -7,6 +7,7 @@ const getHtml = (body, header) => {
 	<html lang="en">
 	<head>
 		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<title>Taut</title>
 		${header}
 	</head>
@@ -163,8 +164,8 @@ module.exports = {
 					</div>
 				</div>
 				<div class="message_content ">
-					<span class="member">${sender}</span>
-					<span class="timestamp" data-ts="${new Date().getTime()}"></span>
+					<span class="member">${sender}</span>&nbsp;
+					<span class="timestamp" data-ts="${message.ts}"></span>
 					<span class="message_body">${content}</span>
 				</div>
 			</ts-message>

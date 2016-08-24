@@ -61,7 +61,7 @@ var getMessages = function() {
                     var h = d.getHours();
                     var ap = h > 12 ? "PM":"AM";
                     var h = h > 12 ? h-12 : h;
-                    x[i].innerHTML = h+":"+d.getMinutes()+" "+ap
+                    x[i].innerHTML = h+":"+ ("0"+d.getMinutes()).slice(-2) +" "+ap
                 }
                 var mc = document.getElementById("messages_container");
                 mc.scrollTop = mc.scrollHeight;

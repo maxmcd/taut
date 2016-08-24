@@ -359,8 +359,25 @@ ts-message {
 	word-wrap: break-word;
 }
 
-@media (min-width: 550px) {
-  	.facet_sidebar {
+@media (max-width: 550px) {
+  	.facet_sidebar, 
+    #col_channels_bg, 
+    #col_channels,
+    #team_menu
+    {
    		display: none;
   	}
+    #messages_container, #channel_header {
+        margin-left: 0px;
+    }
+    #client_body:before {
+        left: 0px;
+    }
+    #footer {
+        left: 0px;
+    }
+    iframe {
+        margin-left: 0;
+    }
+
 }

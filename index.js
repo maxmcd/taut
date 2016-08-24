@@ -5,13 +5,13 @@
 	const querystring = require('querystring');
 	const crypto = require('crypto');
 
-	const tmpl = require('./templates')
+	const templates = require('./templates')
 
 	const port = 8125
 
 	const waiting = [];
-	const ppl = {};
-	const messages = [{sender: "max", content: "default"}];
+	const onlinePeople = {};
+	const messages = [{sender: "max", content: "default", ts: new Date(1988).getTime()}];
 
 
 	let getNic = (req) => {
@@ -20,10 +20,10 @@
 	}
 	let nicResponse = (nic, resp, params, taken) => {
 		if (nic) {
-			ppl[nic] = new Date().getTime()
-			resp.end(tmpl.index(params.noscript, Object.keys(ppl).length), 'utf-8');
+			onlinePeople[nic] = new Date().getTime()
+			resp.end(templates.index(params.noscript, Object.keys(onlinePeople).length), 'utf-8');
 		} else {
-			resp.end(tmpl.form(taken), 'utf-8');
+			resp.end(templates.form(taken), 'utf-8');
 		}
 	}
 	function onlyUnique(value, index, self) { 
@@ -31,16 +31,16 @@
 	}
 
 	let people = () => {
-		let nPpl = [];
+		let newPeople = [];
 		let d = new Date().getTime() - 300000 //5min
-		for (let key in ppl) {
-			if (ppl[key] > d) {
-				nPpl.push(key)
+		for (let key in onlinePeople) {
+			if (onlinePeople[key] > d) {
+				newPeople.push(key)
 			} else {
-				delete ppl[key]
+				delete onlinePeople[key]
 			}
 		}
-		return nPpl
+		return newPeople
 	}
 
 	let serveAsset = (resp, filename) => {
@@ -90,13 +90,13 @@
 		} else if (path === "/messages") {
 
 			waiting.push([(message) => {
-				resp.end(tmpl.message(message));
+				resp.end(templates.message(message));
 			}, getNic(req)]);
 
 			resp.writeHead(200, {
 				'Content-Type': 'text/html;',
 			});
-			resp.write(tmpl.messages(messages, true), 'utf-8');
+			resp.write(templates.messages(messages, true), 'utf-8');
 
 		} else if (path === "/messages.json") {
 
@@ -104,8 +104,8 @@
 				'Content-Type': 'application/json;',
 			});
 			let data = {
-				msgs: tmpl.messagesArray(messages),
-				people: tmpl.ppls(people()),
+				msgs: templates.messagesArray(messages),
+				people: templates.ppls(people()),
 			}
 			
 			resp.end(JSON.stringify(data), 'utf-8');
@@ -122,11 +122,12 @@
 
 				let bodyParams = querystring.parse(body.toString('utf8'))
 
-				ppl[getNic(req)] = new Date().getTime()
+				onlinePeople[getNic(req)] = new Date().getTime()
 
 				let msg = {
 					sender: getNic(req),
 					content: bodyParams.message,
+					ts: new Date().getTime(),
 				}
 
 				messages.push(msg)
@@ -144,7 +145,7 @@
 				}
 
 				resp.end('');
-	  		})
+			})
 
 		} else {
 			resp.writeHead(404);
