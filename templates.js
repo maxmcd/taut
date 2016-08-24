@@ -39,7 +39,7 @@ module.exports = {
 			`
 			messagesContainer = `
 			<noscript>
-				<iframe src="/messages?id=${Math.random()}" frameborder="0"></iframe>
+				<iframe name="mc" src="/messages?id=${Math.random()}" frameborder="0"></iframe>
 			</noscript>
 			`
 			onsubmit = "newMessage();return false;"
@@ -61,7 +61,7 @@ module.exports = {
 					<div id="footer_msgs">
 						<div id="messages-input-container">
 							<span id="primary_file_button"></span>
-							<form action="/message" method="post" id="message-form" onsubmit="${onsubmit}">
+							<form action="/message" method="post" target="mc" id="message-form" onsubmit="${onsubmit}">
 								<input autofocus name="message" id="message-input" autocorrect="off" autocomplete="off" spellcheck="true" />
 							</form>
 						</div>
@@ -89,11 +89,6 @@ module.exports = {
 						</div>
 					</div>
 				</div>
-				<div id="messages"></div>
-				<form action="/message" method="post" >
-					<input type="text" name="message" id="input" />
-					<input type="submit" />
-				</form>
 			</div>
 			</body>
 		`
@@ -116,8 +111,12 @@ module.exports = {
 			</form>
 		`)
 	},
-	messages(messages) {
+	messages(messages, noClosingTags) {
 		let messageBody = this.messagesArray(messages).join("")
+
+		let cts = `</div></div></div></div></div></body>`
+
+		if (noClosingTags) cts=``;
 
 		return getHtml(`
 			<body class="iframe">
@@ -126,13 +125,7 @@ module.exports = {
 					<div id="msg_div">
 						<div class="day_container">
 							<div class="day_msgs" id="day_msgs">
-							${messageBody}
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			</body>`, `
+							${messageBody}${cts}`, `
 			<link rel="stylesheet" href="/app.css" />
 			<!-- <noscript> -->
 			<meta http-equiv="refresh" content="0; ?id=${Math.random()}" />

@@ -76,6 +76,10 @@ header {
     width: 204px;
 }
 
+ul {
+    padding: 0px;
+}
+
 .presence {
     width: .5625rem;
     height: .5625rem;
@@ -95,6 +99,7 @@ header {
     margin-right: 1px;
     position: relative;
     clear: both;
+    padding-left: 16px;
 }
 
 #channel_header_info {
