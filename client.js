@@ -18,14 +18,11 @@ var checkIsNewMessage = function() {
     var url = "/is-new-message?" + Math.random(),
         xhr = new XMLHttpRequest();
     xhr.open("GET", url);
-    xhr.onload = function() {
-        console.log("Got new message!")
-        getMessages()
-        checkIsNewMessage()
-    }
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
+                getMessages()
+                checkIsNewMessage()
             } else {
                 setTimeout(function() {
                     checkIsNewMessage()                    

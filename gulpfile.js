@@ -29,6 +29,6 @@ gulp.task('build', function (cb) {
     .pipe(gzip())
     .pipe(gulp.dest('build'));
 
-    spawn('./size.sh', [], {stdio: "inherit"})
+    spawn('./bin/size.sh', [], {stdio: "inherit"})
 });
 

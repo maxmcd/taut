@@ -16,7 +16,7 @@
 		try {
 			return JSON.parse(fs.readFileSync('./messages.json'));
 		} catch(e) {
-			return [{sender: "max", content: "default", ts: new Date(1988).getTime()}]
+			return [{sender: "max", content: "default", ts: new Date(8675309).getTime()}]
 		}
 	})()
 
@@ -24,6 +24,7 @@
 		var parts =  ("; " + req.headers.cookie).split("; nic=");
 		if (parts.length == 2) return parts.pop().split(";").shift();
 	}
+
 	let nicResponse = (nic, resp, params, taken) => {
 		if (nic) {
 			onlinePeople[nic] = new Date().getTime()
@@ -31,9 +32,6 @@
 		} else {
 			resp.end(templates.form(taken), 'utf-8');
 		}
-	}
-	function onlyUnique(value, index, self) { 
-		return self.indexOf(value) === index;
 	}
 
 	let people = () => {
@@ -65,11 +63,20 @@
 			}
 		})
 	}
+
 	http.createServer(function (req, resp) {
 
 		let urlParts = url.parse(req.url, true);
 		let path = urlParts.pathname;
 		let params = urlParts.query;
+
+		// only really there for long polling endpoints
+		// might cause some issues if other requests are
+		// actually taking this long to respond
+		let littleLessThanOneMin = 58000;
+		resp.setTimeout(littleLessThanOneMin, function(hm) {
+			resp.end('ended')
+		})
 
 		if (path === "/") {
 
@@ -158,7 +165,6 @@
 			})
 
 		} else {
-
 			resp.writeHead(404);
 			resp.end("404", 'utf-8');
 		}

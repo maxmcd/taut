@@ -15,12 +15,13 @@ const getHtml = (body, header) => {
 	`
 }
 
-const colorKey = "a32ab719ce63d55ee88ff1c7g82eh541i505j3c0k56cl2a2m929nb25od45pb57q55br439sd2ct01cu131v005w299yc03z415"    
+// 26 three char hex color codes
+const colorKey = "32a719e6355e88f1c782e5415053c056c2a2929b25d45b5755b439d2c01c131005299c03415719"    
 const colors = {}
 
-let keyParts = colorKey.match(/.{1,4}/g)
-for (let i=0;i<keyParts.length;i++) {
-    colors[keyParts[i].substring(0,1)] = keyParts[i].substring(1,4)
+for (let i=97;i<123;i++) {
+	let colorIndex = (i-97)*3
+	colors[String.fromCharCode(i)] = colorKey.substring(colorIndex, colorIndex+3)
 }
 
 module.exports = {
@@ -71,7 +72,14 @@ module.exports = {
 						<div id="messages-input-container">
 							<span id="primary_file_button"></span>
 							<form action="/message" method="post" target="" id="message-form" onsubmit="${onsubmit}">
-								<input autofocus name="message" id="message-input" autocorrect="off" autocomplete="off" spellcheck="true" />
+								<input 
+									autofocus 
+									name="message" 
+									id="message-input" 
+									placeholder="Message #general"
+									autocorrect="off" 
+									autocomplete="off" 
+									spellcheck="true" />
 							</form>
 						</div>
 					</div>
@@ -145,14 +153,16 @@ module.exports = {
 	messagesArray(messages) {
 		let out = []
 		for (let i=0;i<messages.length;i++) {
-			out.push(this.message(messages[i]))
+			let last;
+			if (i>0) last = messages[i-1];
+			out.push(this.message(messages[i], last))
 		}
 		return out
 	},
 	rpl: {
 		"\\*":"b","_":"i","~":"strike","`":"code"
 	},
-	message(message) {
+	message(message, last) {
 		let sender = message.sender
 			.replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
@@ -186,20 +196,33 @@ module.exports = {
 			`$1<a href="$2" target="_blank">$2</a>`
 		)
 
+		let gutter = `
+			<div class="message_gutter">
+				<div class="message_icon">
+					<span 
+						style="background-color: #${colors[sender[0]] || "ccc"}"
+						class="member_image">
+							${sender[0]}
+					</span>
+				</div>
+			</div>
+		`
+		let meta = `
+		<span class="member">${sender}</span>&nbsp;
+		<span class="timestamp" data-ts="${message.ts}"></span>
+		`
+
+		if (last) {
+			if (last.sender == message.sender && ((message.ts - last.ts) < 30000)) {
+				meta = ""
+				gutter = ""
+			}
+		}
 		return `
 			<ts-message class="message feature_fix_files first">
-				<div class="message_gutter">
-					<div class="message_icon">
-						<span 
-							style="background-color: #${colors[sender[0]] || "ccc"}"
-							class="member_image">
-								${sender[0]}
-						</span>
-					</div>
-				</div>
+				${gutter}
 				<div class="message_content ">
-					<span class="member">${sender}</span>&nbsp;
-					<span class="timestamp" data-ts="${message.ts}"></span>
+					${meta}
 					<span class="message_body">${content}</span>
 				</div>
 			</ts-message>
