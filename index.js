@@ -11,8 +11,14 @@
 
 	const waiting = [];
 	const onlinePeople = {};
-	const messages = [{sender: "max", content: "default", ts: new Date(1988).getTime()}];
 
+	const messages = (function() {
+		try {
+			return JSON.parse(fs.readFileSync('./messages.json'));
+		} catch(e) {
+			return [{sender: "max", content: "default", ts: new Date(1988).getTime()}]
+		}
+	})()
 
 	let getNic = (req) => {
 		var parts =  ("; " + req.headers.cookie).split("; nic=");
@@ -27,7 +33,7 @@
 		}
 	}
 	function onlyUnique(value, index, self) { 
-	    return self.indexOf(value) === index;
+		return self.indexOf(value) === index;
 	}
 
 	let people = () => {
@@ -47,15 +53,15 @@
 		fs.readFile(`./${filename}.gz`, function(error, content) {
 			if (error) {
 				fs.readFile(`./${filename}`, function(error, content) {
-	        		resp.writeHead(200, { 'Content-Type': "text/css" });
-	        		resp.end(content, 'utf-8');
-	    		});
+					resp.writeHead(200, { 'Content-Type': "text/css" });
+					resp.end(content, 'utf-8');
+				});
 			} else {
 				resp.writeHead(200, { 
 					'Content-Type': "text/css",
 					'content-encoding':'gzip',
 				});
-	    		resp.end(content, 'utf-8');
+				resp.end(content, 'utf-8');
 			}
 		})
 	}
@@ -132,6 +138,10 @@
 
 				messages.push(msg)
 
+				if (messages.length > 50) {
+					messages.shift()
+				}
+
 				while (waiting.length) {
 					waiting.pop()[0](msg)
 				}
@@ -140,7 +150,7 @@
 					resp.writeHead(200);
 				} else {
 					resp.writeHead(302, {
-						'Location':'/messages'
+						'Location':'/'
 					});
 				}
 
@@ -148,9 +158,25 @@
 			})
 
 		} else {
+
 			resp.writeHead(404);
 			resp.end("404", 'utf-8');
 		}
 	}).listen(port);
+
 	console.log(`Server running on port ${port}`);
+	
+	process.stdin.resume();
+	process.on('exit', function () {
+		fs.writeFileSync("./messages.json", JSON.stringify(messages))
+		console.log(`${messages.length} messages saved!`);
+	});
+	process.on('SIGINT', function () {
+		process.exit(2);
+	});
+	
+	process.once('SIGUSR2', function(code) {
+    	process.exit(0);
+	});
+
 })()

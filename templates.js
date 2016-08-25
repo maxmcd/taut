@@ -15,6 +15,14 @@ const getHtml = (body, header) => {
 	`
 }
 
+const colorKey = "a32ab719ce63d55ee88ff1c7g82eh541i505j3c0k56cl2a2m929nb25od45pb57q55br439sd2ct01cu131v005w299yc03z415"    
+const colors = {}
+
+let keyParts = colorKey.match(/.{1,4}/g)
+for (let i=0;i<keyParts.length;i++) {
+    colors[keyParts[i].substring(0,1)] = keyParts[i].substring(1,4)
+}
+
 module.exports = {
 	index(noscript, members) {
 		if (!noscript) noscript=false; 
@@ -30,7 +38,7 @@ module.exports = {
 				</script>
 			`
 			messagesContainer = `
-				<iframe src="/messages?id=${Math.random()}" frameborder="0"></iframe>
+				<iframe src="/messages?id=${Math.random()}#l" frameborder="0"></iframe>
 			`
 			onsubmit = ""
 		} else {
@@ -40,7 +48,7 @@ module.exports = {
 			`
 			messagesContainer = `
 			<noscript>
-				<iframe name="mc" src="/messages?id=${Math.random()}" frameborder="0"></iframe>
+				<iframe name="mc" src="/messages?id=${Math.random()}#l" frameborder="0"></iframe>
 			</noscript>
 			`
 			onsubmit = "newMessage();return false;"
@@ -62,7 +70,7 @@ module.exports = {
 					<div id="footer_msgs">
 						<div id="messages-input-container">
 							<span id="primary_file_button"></span>
-							<form action="/message" method="post" target="mc" id="message-form" onsubmit="${onsubmit}">
+							<form action="/message" method="post" target="" id="message-form" onsubmit="${onsubmit}">
 								<input autofocus name="message" id="message-input" autocorrect="off" autocomplete="off" spellcheck="true" />
 							</form>
 						</div>
@@ -126,7 +134,8 @@ module.exports = {
 					<div id="msg_div">
 						<div class="day_container">
 							<div class="day_msgs" id="day_msgs">
-							${messageBody}${cts}`, `
+							${messageBody}${cts}
+							<div id="l"></div>`, `
 			<link rel="stylesheet" href="/app.css" />
 			<!-- <noscript> -->
 			<meta http-equiv="refresh" content="0; ?id=${Math.random()}" />
@@ -144,9 +153,14 @@ module.exports = {
 		"\\*":"b","_":"i","~":"strike","`":"code"
 	},
 	message(message) {
-		let sender = message.sender;
+		let sender = message.sender
+			.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+		// sanitize
 		let content = message.content
-			.replace(/</g, '&lt;').replace(/>/g, '&gt;')
+			.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+		// formatting
 		for (let key in this.rpl) {
 			let re = new RegExp(`(\\s?)${key}(\\w+)${key}($|\\s)`,"gi");
 			content = content.replace(
@@ -155,12 +169,32 @@ module.exports = {
 			)
 		}
 
-		// TODO: sanitize html
+		// blockqoute
+		content = content.replace(
+			/^&gt;(.*)$/,
+			`<blockquote>$1</blockquote>`
+		)
+
+		// links
+		// http://stackoverflow.com/questions/3809401/what-is-a-good-regular-expression-to-match-a-url
+		content = content.replace(
+			/(^|\s)([-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&\/\/=]*))/gi,
+			`$1<a href="http://$2" target="_blank">$2</a>`
+		)
+		content = content.replace(
+			/(^|\s)(https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]+\b([-a-zA-Z0-9@:%_\+.~#?&\/\/=]*))/gi,
+			`$1<a href="$2" target="_blank">$2</a>`
+		)
+
 		return `
 			<ts-message class="message feature_fix_files first">
 				<div class="message_gutter">
 					<div class="message_icon">
-						<span class="member_image">${sender[0]}</span>
+						<span 
+							style="background-color: #${colors[sender[0]] || "ccc"}"
+							class="member_image">
+								${sender[0]}
+						</span>
 					</div>
 				</div>
 				<div class="message_content ">

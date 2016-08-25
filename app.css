@@ -306,7 +306,11 @@ ts-message .member {
 
 	background-color: pink;
 
-	color: transparent;
+	color: white;
+    line-height: 35px;
+    text-transform: capitalize;
+    font-size: 21px;
+    text-align: center;
 
 	/* thumb_36 */
 
@@ -328,9 +332,23 @@ ts-message .message_body {
 
 }
 
+blockquote {
+    margin: 0px;
+    border-left: 4px solid #e3e4e6;
+    padding-left: 12px;
+}
+
 ts-message .message_content {
 	margin-top: .0625rem;
 	margin-left: 4.5rem;
+}
+
+ts-message .message_content a {
+    color: #2a80b9;
+}
+
+ts-message .message_content a:hover {
+    text-decoration: underline;
 }
 
 .day_container .day_msgs {
