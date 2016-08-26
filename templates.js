@@ -1,3 +1,4 @@
+"use strict";
 const getHtml = (body, header) => {
 	if (!header) 
 		header = "";
@@ -142,9 +143,6 @@ module.exports = {
 		}
 		return out
 	},
-	rpl: {
-		"\\*":"b","_":"i","~":"strike","`":"code"
-	},
 	message(message, last) {
 		let sender = message.sender
 			.replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -153,18 +151,20 @@ module.exports = {
 		let content = message.content
 			.replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
+		let rpl = {"\\*":"b","_":"i","~":"strike","`":"code"}
+
 		// formatting
-		for (let key in this.rpl) {
-			let re = new RegExp(`(\\s?)${key}(\\w+)${key}($|\\s)`,"gi");
+		for (let key in rpl) {
+			let re = new RegExp(`(\\s?)${key}(.*?)${key}($|\\s)`,"gmi");
 			content = content.replace(
 				re, 
-				`$1<${this.rpl[key]}>$2</${this.rpl[key]}>`
+				`$1<${rpl[key]}>$2</${rpl[key]}>`
 			)
 		}
 
 		// blockqoute
 		content = content.replace(
-			/^&gt;(.*)$/,
+			/^&gt;(.*)$/gm,
 			`<blockquote>$1</blockquote>`
 		)
 
@@ -180,8 +180,6 @@ module.exports = {
 		)
 
 		// newlines
-		// replace duplicate newlines
-		content = content.replace(/[^\w\s]|(\n)(?=\1)/gi, "")
 		// replace \n with <br>
 		content = content.replace(/\n/gi, "<br>")
 

@@ -13,7 +13,7 @@ gulp.task('build', function (cb) {
         presets: ['es2015']
     }))
     .pipe(uglify())
-    .pipe(replace(/(\\n|\\t|\\r)/g, '')) // remove whitespace from template strings
+    .pipe(replace(/\\t|\\r|>\\n/g, '')) // remove whitespace from template strings
     .pipe(gulp.dest('build'));
 
     gulp.src(['client.js'])

@@ -150,7 +150,7 @@ ul {
 	height: 42px;
 }
 
-#messages-input-container #message-input {
+#message-input {
 	height: 42px;
 	background: #fff;
 	width: 100%;
@@ -173,7 +173,7 @@ ul {
     overflow-y: hidden;
 }
 
-#messages-input-container #message-input:focus {
+#message-input:focus {
     border-color: #bbbdbf;
 }
 

@@ -3,7 +3,7 @@
         var url = "/message?ajax=true",
             xhr = new XMLHttpRequest();
         var input = document.getElementById('message-input')
-        var message = input.value
+        var message = input.value.replace(/\n\s*\n/g, '\n');
         // return if all whitespace
         if (! (message.replace(/\s/gi, ""))) return;
         input.value = ""
