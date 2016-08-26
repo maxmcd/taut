@@ -18,42 +18,26 @@ const getHtml = (body, header) => {
 // 26 three char hex color codes
 const colorKey = "32a719e6355e88f1c782e5415053c056c2a2929b25d45b5755b439d2c01c131005299c03415719"    
 const colors = {}
-
 for (let i=97;i<123;i++) {
 	let colorIndex = (i-97)*3
 	colors[String.fromCharCode(i)] = colorKey.substring(colorIndex, colorIndex+3)
 }
 
 module.exports = {
-	index(noscript, members) {
-		if (!noscript) noscript=false; 
+	index(members) {
 		if (!members) members=0;
 
-		let messagesContainer, header, onsubmit
+		let header = `<link rel="stylesheet" href="/app.css" />`
 
-		if (noscript) {
-			header = `
-				<link rel="stylesheet" href="/app.css" />
-				<script>
-					newMessage = function(){};
-				</script>
-			`
-			messagesContainer = `
-				<iframe src="/messages?id=${Math.random()}#l" frameborder="0"></iframe>
-			`
-			onsubmit = ""
-		} else {
-			header = `
-				<link rel="stylesheet" href="/app.css" />
-				<script src="/client.js"></script>
-			`
-			messagesContainer = `
-			<noscript>
-				<iframe name="mc" src="/messages?id=${Math.random()}#l" frameborder="0"></iframe>
-			</noscript>
-			`
-			onsubmit = "newMessage();return false;"
-		}
+		let inputAttributes = `
+			autofocus 
+			name="message" 
+			id="message-input" 
+			placeholder="Message #general"
+			autocorrect="off" 
+			autocomplete="off" 
+			spellcheck="true"
+		`
 
 		let body = `
 			<body>
@@ -71,15 +55,11 @@ module.exports = {
 					<div id="footer_msgs">
 						<div id="messages-input-container">
 							<span id="primary_file_button"></span>
-							<form action="/message" method="post" target="" id="message-form" onsubmit="${onsubmit}">
-								<input 
-									autofocus 
-									name="message" 
-									id="message-input" 
-									placeholder="Message #general"
-									autocorrect="off" 
-									autocomplete="off" 
-									spellcheck="true" />
+							<form action="/message" method="post" target="" id="message-form" onsubmit="newMessage();return false;">
+								<noscript>
+									<input ${inputAttributes}/>
+								</noscript>
+								<textarea ${inputAttributes} /></textarea>
 							</form>
 						</div>
 					</div>
@@ -92,7 +72,9 @@ module.exports = {
 								<ul id="im-list">
 								</ul>
 							</div>
-							${messagesContainer}
+							<noscript>
+								<iframe name="mc" src="/messages?id=${Math.random()}#l" frameborder="0"></iframe>
+							</noscript>
 							<div id="messages_container">
 								<div id="msgs_scroller_div">
 									<div id="msg_div">
@@ -107,6 +89,7 @@ module.exports = {
 					</div>
 				</div>
 			</div>
+			<script src="/client.js"></script>
 			</body>
 		`
 		return getHtml(body, header)
@@ -196,6 +179,12 @@ module.exports = {
 			`$1<a href="$2" target="_blank">$2</a>`
 		)
 
+		// newlines
+		// replace duplicate newlines
+		content = content.replace(/[^\w\s]|(\n)(?=\1)/gi, "")
+		// replace \n with <br>
+		content = content.replace(/\n/gi, "<br>")
+
 		let gutter = `
 			<div class="message_gutter">
 				<div class="message_icon">
@@ -213,13 +202,13 @@ module.exports = {
 		`
 
 		if (last) {
-			if (last.sender == message.sender && ((message.ts - last.ts) < 30000)) {
+			if (last.sender == message.sender && ((message.ts - last.ts) < 60000)) {
 				meta = ""
 				gutter = ""
 			}
 		}
 		return `
-			<ts-message class="message feature_fix_files first">
+			<ts-message>
 				${gutter}
 				<div class="message_content ">
 					${meta}

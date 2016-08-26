@@ -157,7 +157,7 @@ ul {
 	font-size: .9375rem;
 	line-height: 1.2rem;
 	border: 2px solid #E0E0E0;
-	border-left: none;
+	// border-left: none;
 	background-clip: padding-box;
 	font-family: Slack-Lato,appleLogo,sans-serif;
 	margin: 0;
@@ -166,35 +166,22 @@ ul {
 	outline: 0;
 	position: absolute;
 	bottom: 0;
-	height: 100%;
 	min-height: 2.625rem!important;
 	padding: .5625rem 2.5rem .5625rem .5rem;
 	max-height: 10rem!important;
-	border-radius: 0 6px 6px 0;
+	border-radius: 6px;
+    overflow-y: hidden;
 }
 
-#primary_file_button {
-	left: -2.75rem;
-	min-height: 2.625rem!important;
-	height: 2.625rem;
-	max-height: 10rem!important;
-	position: absolute;
-	bottom: 0;
-	height: 42px;
-	width: 2.75rem;
-	padding: 0;
-	border: 2px solid #e0e0e0;
-	background: #fff;
-	color: rgba(0,0,0,.35);
-	line-height: 2.625rem;
-	border-radius: 6px 0 0 6px;
+#messages-input-container #message-input:focus {
+    border-color: #bbbdbf;
 }
 
 #messages-input-container {
 	font-size: .9rem;
 	position: absolute;
 	bottom: 1.375rem;
-	left: 4rem;
+	left: 1.25rem;
 	right: .25rem;
 	padding-right: 1rem;
 	box-shadow: none;

@@ -28,7 +28,7 @@
 	let nicResponse = (nic, resp, params, taken) => {
 		if (nic) {
 			onlinePeople[nic] = new Date().getTime()
-			resp.end(templates.index(params.noscript, Object.keys(onlinePeople).length), 'utf-8');
+			resp.end(templates.index(Object.keys(onlinePeople).length), 'utf-8');
 		} else {
 			resp.end(templates.form(taken), 'utf-8');
 		}
