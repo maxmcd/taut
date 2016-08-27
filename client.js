@@ -1,4 +1,7 @@
 (function() {
+    var lastTs;
+    var cd = document.getElementById("connection_div")
+
     window.newMessage = function() {
         var url = "/message?ajax=true",
             xhr = new XMLHttpRequest();
@@ -15,6 +18,29 @@
         return false;
     }
 
+    var saveMyself = function(delay) {
+        cd.style.display = "initial"
+        delay = delay * 2 + 1
+        var url = "/ping",
+            xhr = new XMLHttpRequest();
+        xhr.open("GET", url);
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    cd.style.display = "none"
+                    getMessages()
+                    checkIsNewMessage()
+                } else {
+                    console.log("Retrying in " + delay/1000 + " seconds")
+                    setTimeout(function() {
+                        saveMyself(delay)
+                    }, delay)
+                }
+            }
+        }
+        xhr.send();
+    }
+
     var checkIsNewMessage = function() {
         console.log("waiting for a new message")
         var url = "/is-new-message?" + Math.random(),
@@ -26,13 +52,10 @@
                     getMessages()
                     checkIsNewMessage()
                 } else {
-                    setTimeout(function() {
-                        checkIsNewMessage()                    
-                    }, 500)
+                    saveMyself(100)
                 }
             }
         }
-
         xhr.send();
     }
 
@@ -62,7 +85,7 @@
                         var h = h > 12 ? h-12 : h;
                         x[i].innerHTML = h+":"+ ("0"+d.getMinutes()).slice(-2) +" "+ap
                     }
-                    var mc = document.getElementById("messages_container");
+                    var mc = document.getElementById("msgs_scroller_div");
                     mc.scrollTop = mc.scrollHeight;
                 } else {
                     console.log('Error: ' + xhr.status);
@@ -78,7 +101,6 @@
     var mi = document.getElementById("message-input")
     mi.style.display = "inherit"
     mi.addEventListener('keydown', function (e){
-        console.log(e)
         if (e.keyCode === 13 && !e.shiftKey) {
             e.preventDefault()
             newMessage()
@@ -88,4 +110,18 @@
             mi.style.height = mi.scrollHeight+'px'
         }, 0)
     });
+
+    // function notify(message) {
+    //     if (!("Notification" in window)) {
+
+    //     } else if (Notification.permission === "granted") {
+    //         var notification = new Notification(message);
+    //     }
+    //     else if (Notification.permission !== 'denied') {
+    //         Notification.requestPermission(function(permission) {
+    //             if (permission === "granted") notify(message);
+    //         });
+    //     }
+    // }
+
 })()

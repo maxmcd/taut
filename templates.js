@@ -77,6 +77,7 @@ module.exports = {
 								<iframe name="mc" src="/messages?id=${Math.random()}#l" frameborder="0"></iframe>
 							</noscript>
 							<div id="messages_container">
+								<div id="connection_div">Connection lost. Reconnecting...</div>
 								<div id="msgs_scroller_div">
 									<div id="msg_div">
 										<div class="day_container">
@@ -187,7 +188,7 @@ module.exports = {
 			<div class="message_gutter">
 				<div class="message_icon">
 					<span 
-						style="background-color: #${colors[sender[0]] || "ccc"}"
+						style="background-color: #${colors[sender[0].toLowerCase()] || "ccc"}"
 						class="member_image">
 							${sender[0]}
 					</span>

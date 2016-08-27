@@ -24,7 +24,6 @@ body.iframe {
 }
 
 code {
-    padding: 0 3px 2px;
     font-family: Monaco,Menlo,Consolas,"Courier New",monospace;
     font-size: 12px;
     line-height: 12px;
@@ -44,6 +43,7 @@ code {
 	left: 0;
 	overflow: hidden;
 }
+
 header {
 	background: 0 0;
 	height: 3.3125rem;
@@ -52,6 +52,7 @@ header {
 	min-width: 768px;
 	width: 100%;
 }
+
 #team_menu {
 	font-size: 1rem;
 	font-weight: 900;
@@ -131,7 +132,6 @@ ul {
 	padding: .7rem 0 0;
 	margin: 0 0 0 220px;
 	height: 3.3125rem;
-	font-family: Slack-Lato,appleLogo,sans-serif;
 	z-index: 25;
 }
 
@@ -159,7 +159,6 @@ ul {
 	border: 2px solid #E0E0E0;
 	// border-left: none;
 	background-clip: padding-box;
-	font-family: Slack-Lato,appleLogo,sans-serif;
 	margin: 0;
 	color: #3d3c40;
 	box-shadow: none;
@@ -228,7 +227,6 @@ ul {
 	width: 220px;
 	float: left;
 	position: relative;
-	font-family: Slack-Lato,appleLogo,sans-serif;
 	top: .5rem;
 }
 
@@ -246,34 +244,37 @@ ul {
 }
 
 #messages_container, iframe {
-    overflow-y: scroll;
     position: relative;
     margin-left: 220px;
-    padding-bottom: 140px;
     height: 100%;
     display: block;
+}
+#msgs_scroller_div {
+    overflow-y: scroll;
+    height: 100%;
+    padding-bottom: 140px;
 }
 iframe {
 	width: 100%;
 }
 
-ts-message .message_gutter {
+.message_gutter {
 	width: 4.5rem;
 	padding-right: .625rem;
 }
-ts-message .message_gutter {
+.message_gutter {
 	text-align: right;
 	position: absolute;
 	top: 0;
 	left: 0;
 }
 
-ts-message .timestamp {
+.timestamp {
 	color: #9e9ea6;
 	font-size: .75rem;
 }
 
-ts-message .member {
+.member {
 	font-weight: 900;
 	color: #2c2d30;
 	line-height: 1.125rem;
@@ -309,7 +310,7 @@ ts-message .member {
 	*/
 }
 
-ts-message .message_body {
+.message_body {
 	display: block;
 	cursor: text;
 
@@ -325,16 +326,16 @@ blockquote {
     padding-left: 12px;
 }
 
-ts-message .message_content {
+.message_content {
 	margin-top: .0625rem;
 	margin-left: 4.5rem;
 }
 
-ts-message .message_content a {
+.message_content a {
     color: #2a80b9;
 }
 
-ts-message .message_content a:hover {
+.message_content a:hover {
     text-decoration: underline;
 }
 
@@ -363,6 +364,40 @@ ts-message {
 	line-height: 1.375rem;
 	word-wrap: break-word;
 }
+
+#connection_div {
+    display: none;
+    color: #fff;
+    text-align: center;
+    font-size: .9rem;
+    font-weight: 900;
+    line-height: 1.2rem;
+    padding: .2rem .4rem 0;
+    border-radius: .375rem;
+    margin-left: 1rem;
+    margin-right: .5rem;
+    -webkit-transition: background .1s ease-out 0s;
+    -moz-transition: background .1s ease-out 0s;
+    transition: background .1s ease-out 0s;
+    position: absolute;
+    top: 1.5rem;
+    left: 0;
+    right: 1rem;
+    height: 1.5625rem;
+    text-shadow: 0 1px #00000026;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    z-index: 99;
+    height: 26px;
+    line-height: 1.125rem;
+    background: #dfa941;
+}
+
+
+
+
 
 @media (max-width: 550px) {
   	.facet_sidebar, 

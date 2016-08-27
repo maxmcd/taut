@@ -124,6 +124,11 @@
 			
 			resp.end(JSON.stringify(data), 'utf-8');
 
+		} else if (path === "/ping") {
+			resp.writeHead(200, {
+				'Content-Type': 'text/plain;',
+			});
+			resp.end("pong")
 		} else if (path === "/is-new-message") {
 
 			waiting.push([() => {
