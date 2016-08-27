@@ -6,7 +6,8 @@
         var url = "/message?ajax=true",
             xhr = new XMLHttpRequest();
         var input = document.getElementById('message-input')
-        var message = input.value.replace(/\n\s*\n/g, '\n');
+        // var message = input.value.replace(/\n\s*\n/g, '\n');
+        var message = input.value.trim();
         // return if all whitespace
         if (! (message.replace(/\s/gi, ""))) return;
         input.value = ""
@@ -85,7 +86,7 @@
                         var h = h > 12 ? h-12 : h;
                         x[i].innerHTML = h+":"+ ("0"+d.getMinutes()).slice(-2) +" "+ap
                     }
-                    var mc = document.getElementById("msgs_scroller_div");
+                    var mc = document.getElementById("msd");
                     mc.scrollTop = mc.scrollHeight;
                 } else {
                     console.log('Error: ' + xhr.status);

@@ -1,6 +1,0 @@
-{
-  "ignore": ["build"],
-  "events": {
-    "exit": "gulp build"
-  }
-}

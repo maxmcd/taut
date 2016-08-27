@@ -15,11 +15,17 @@
 
 	const messages = (function() {
 		try {
-			return JSON.parse(fs.readFileSync('./messages.json'));
+			return JSON.parse(fs.readFileSync(`${__dirname}/messages.json`));
 		} catch(e) {
-			return [{sender: "max", content: "default", ts: new Date(8675309).getTime()}]
+			return [{
+				sender: "max", 
+				content: "default", 
+				ts: new Date(8675309).getTime()
+			}]
 		}
 	})()
+
+
 
 	let getNic = (req) => {
 		var parts =  ("; " + req.headers.cookie).split("; nic=");
@@ -46,12 +52,13 @@
 			}
 		}
 		return newPeople
+
 	}
 
 	let serveAsset = (resp, filename) => {
-		fs.readFile(`./${filename}.gz`, function(error, content) {
+		fs.readFile(`${__dirname}/${filename}.gz`, function(error, content) {
 			if (error) {
-				fs.readFile(`./${filename}`, function(error, content) {
+				fs.readFile(`${__dirname}/${filename}`, function(error, content) {
 					resp.writeHead(200, { 'Content-Type': "text/css" });
 					resp.end(content, 'utf-8');
 				});
@@ -176,19 +183,30 @@
 		}
 	}).listen(port);
 
+
 	console.log(`Server running on port ${port}`);
 	
 	process.stdin.resume();
+	let save = () => {
+		fs.writeFileSync(`${__dirname}/messages.json`, JSON.stringify(messages))
+		console.log(`${messages.length} messages saved!`);		
+	}
 	process.on('exit', function () {
-		fs.writeFileSync("./messages.json", JSON.stringify(messages))
-		console.log(`${messages.length} messages saved!`);
+		save()
 	});
 	process.on('SIGINT', function () {
-		process.exit(2);
+		process.exit(0);
+		console.log('sigint')
+	});
+
+	process.on('SIGTERM', function() {
+    	process.exit(0);
 	});
 	
-	process.once('SIGUSR2', function(code) {
-    	process.exit(0);
+	process.once('SIGUSR2', function() {
+		console.log('SIGUSR2')
+		save()
+    	process.kill(process.pid, 'SIGUSR2');
 	});
 
 })()
