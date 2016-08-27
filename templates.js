@@ -1,4 +1,5 @@
 "use strict";
+
 const getHtml = (body, header) => {
 	if (!header) 
 		header = "";
@@ -47,15 +48,14 @@ module.exports = {
 					<div id="team_menu">
 						<span id="team_name">Taut</span>
 					</div>
-					<div id="channel_header">
-						<div id="channel_title">#general</div>
-						<div id="channel_header_info">${members} members</div>
+					<div id="ch">
+						<div id="ct">#general</div>
+						<div id="chi">${members} members</div>
 					</div>
 				</header>
 				<div id="footer">
 					<div id="footer_msgs">
-						<div id="messages-input-container">
-							<span id="primary_file_button"></span>
+						<div id="mic">
 							<form action="/message" method="post" target="" id="message-form" onsubmit="newMessage();return false;">
 								<noscript>
 									<input ${inputAttributes}/>
@@ -68,19 +68,19 @@ module.exports = {
 				<div id="client_body">
 					<div id="col_messages">
 						<div class="row-fluid">
-							<div id="col_channels_bg"></div>
-							<div id="col_channels">
+							<div id="ccb"></div>
+							<div id="cc">
 								<ul id="im-list">
 								</ul>
 							</div>
 							<noscript>
 								<iframe name="mc" src="/messages?id=${Math.random()}#l" frameborder="0"></iframe>
 							</noscript>
-							<div id="messages_container">
+							<div id="mc">
 								<div id="connection_div">Connection lost. Reconnecting...</div>
-								<div id="msgs_scroller_div">
+								<div id="msd">
 									<div id="msg_div">
-										<div class="day_container">
+										<div id="dc">
 											<div class="day_msgs" id="day_msgs">
 											</div>
 										</div>

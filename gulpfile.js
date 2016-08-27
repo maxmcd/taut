@@ -15,6 +15,9 @@ gulp.task('build', function (cb) {
     .pipe(uglify())
     .pipe(replace(/\\t|\\r/g, '')) // remove whitespace from template strings
     .pipe(replace(/>\\n/g, '>'))
+    .pipe(replace("<div ","¢"))
+    .pipe(replace("</div>","£"))
+    .pipe(replace("id=\"","¤"))
     .pipe(gulp.dest('build'));
 
     gulp.src(['client.js'])

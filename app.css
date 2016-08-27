@@ -103,7 +103,7 @@ ul {
     padding-left: 16px;
 }
 
-#channel_header_info {
+#chi {
     margin-top: 3px;
     padding-left: 1.3rem;
     background: #fff;
@@ -113,7 +113,7 @@ ul {
     line-height: 1.16;
 }
 
-#channel_title {
+#ct {
     padding: 0 .1rem 0 1.3rem;
     color: #2c2d30;
     font-weight: 900;
@@ -128,7 +128,7 @@ ul {
     max-width: 9.12rem;
 }
 
-#channel_header {
+#ch {
 	padding: .7rem 0 0;
 	margin: 0 0 0 220px;
 	height: 3.3125rem;
@@ -176,7 +176,7 @@ ul {
     border-color: #bbbdbf;
 }
 
-#messages-input-container {
+#mic {
 	font-size: .9rem;
 	position: absolute;
 	bottom: 1.375rem;
@@ -210,7 +210,7 @@ ul {
 	content: '';
 }
 
-#col_channels_bg {
+#ccb {
 	height: auto;
 	height: 1800px;
 	background: #4D5250;
@@ -221,7 +221,7 @@ ul {
 	bottom: -3rem;
 }
 
-#col_channels {
+#cc {
 	background: #4D5250;
 	color: #ab9ba9;
 	width: 220px;
@@ -230,7 +230,7 @@ ul {
 	top: .5rem;
 }
 
-#col_messages, .row-fluid, #messages_container {
+#col_messages, .row-fluid, #mc {
 	height: 100%;
 }
 
@@ -243,13 +243,13 @@ ul {
     top: 0px;
 }
 
-#messages_container, iframe {
+#mc, iframe {
     position: relative;
     margin-left: 220px;
     height: 100%;
     display: block;
 }
-#msgs_scroller_div {
+#msd {
     overflow-y: scroll;
     height: 100%;
     padding-bottom: 140px;
@@ -339,13 +339,13 @@ blockquote {
     text-decoration: underline;
 }
 
-.day_container .day_msgs {
+#dc .day_msgs {
 	margin: -18px 0 0;
 	padding: 1.75rem 0 1.25rem;
 	border-top: 1px solid #e8e8e8;
 }
 
-.day_container {
+#dc {
 	position: relative;
 }
 
@@ -407,7 +407,7 @@ ts-message {
     {
    		display: none;
   	}
-    #messages_container, #channel_header {
+    #mc, #ch {
         margin-left: 0px;
     }
     #client_body:before {
