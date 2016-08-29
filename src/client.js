@@ -72,6 +72,7 @@
 
                     let ppl = data.people
                     document.getElementById('ili').innerHTML = ppl.join("")
+                    document.getElementById('chi').innerHTML = `${ppl.length} member${ppl.length == 1 ? "":"s"}`
 
                     var messageBody = "";
                     for (var i=0;i<messages.length;i++) {

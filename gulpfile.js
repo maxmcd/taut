@@ -9,7 +9,7 @@ const gzip = require('gulp-gzip');
 const spawn = require('child_process').spawn;
 
 gulp.task('server', function() {
-    return gulp.src(['src/index.js','src/templates.js'])
+    return gulp.src(['src/index.js'])
     .pipe(babel({
         presets: ['es2015']
     }))
