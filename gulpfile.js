@@ -43,6 +43,7 @@ gulp.task('watch', ['build'], function () {
     var stream =  nodemon({
         script: 'dist/index.js',
         watch: 'src', 
+        ext: 'js css',
         tasks: ['build'],
     })
     return stream

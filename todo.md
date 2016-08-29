@@ -2,8 +2,5 @@
  - Keep thinking about emojis
  - add scrolling to noscript iframe with anchor tags - this doesn't work
  - add more style to view, figure out a better way to choose a nickname
- - refactor xhr code in client
- - exponential backoff to re-request connection
- - Add slack status bar
- - browser notifications
- - Add status endpoint for connection notification
+ - format messages on receipt, not on the fly
+ - you want the whole page to load, and then hang with no content waiting for another message

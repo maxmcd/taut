@@ -1,7 +1,7 @@
 "use strict";
 
 const getHtml = (body, header) => {
-	if (!header) 
+	if (!header)
 		header = "";
 
 	return `
@@ -18,7 +18,7 @@ const getHtml = (body, header) => {
 }
 
 // 26 three char hex color codes
-const colorKey = "32a719e6355e88f1c782e5415053c056c2a2929b25d45b5755b439d2c01c131005299c03415719"    
+const colorKey = "32a719e6355e88f1c782e5415053c056c2a2929b25d45b5755b439d2c01c131005299c03415719"
 const colors = {}
 for (let i=97;i<123;i++) {
 	let colorIndex = (i-97)*3
@@ -32,12 +32,11 @@ module.exports = {
 		let header = `<link rel="stylesheet" href="/app.css" />`
 
 		let inputAttributes = `
-			autofocus 
-			name="message" 
-			id="message-input" 
+			autofocus
+			id="message-input"
 			placeholder="Message #general"
-			autocorrect="off" 
-			autocomplete="off" 
+			autocorrect="off"
+			autocomplete="off"
 			spellcheck="true"
 		`
 
@@ -47,6 +46,10 @@ module.exports = {
 				<header>
 					<div id="team_menu">
 						<span id="team_name">Taut</span>
+						<li class="usr">
+							<span class="presence active"></span>
+							max
+						</li>
 					</div>
 					<div id="ch">
 						<div id="ct">#general</div>
@@ -58,7 +61,7 @@ module.exports = {
 						<div id="mic">
 							<form action="/message" method="post" target="" id="message-form" onsubmit="newMessage();return false;">
 								<noscript>
-									<input ${inputAttributes}/>
+									<input name="message" ${inputAttributes}/>
 								</noscript>
 								<textarea ${inputAttributes} /></textarea>
 							</form>
@@ -71,6 +74,10 @@ module.exports = {
 							<div id="ccb"></div>
 							<div id="cc">
 								<ul id="im-list">
+									<li class="usr active">
+										# general
+									</li>
+									<div id="ili"></div>
 								</ul>
 							</div>
 							<noscript>
@@ -98,14 +105,17 @@ module.exports = {
 	},
 	ppls(peoples) {
 		return peoples.map((ppl) => {
-			return `<li>
+			return `<li class="usr">
 				<span class="presence active"></span>
 				${ppl}
 			</li>`
-		})	
+		})
 	},
 	form() {
 		return getHtml(`
+			<div class="card">
+
+			</div>
 			<form method="post">
 				<p>Enter a nickname:</p>
 				<input type="text" name="nic">
@@ -113,25 +123,24 @@ module.exports = {
 			</form>
 		`)
 	},
-	messages(messages, noClosingTags) {
+	messages(messages, noClosingTags, ts) {
 		let messageBody = this.messagesArray(messages).join("")
 
-		let cts = `</div></div></div></div></div></body>`
+		let cts = `</div></div></div></div></body>`
 
 		if (noClosingTags) cts=``;
 
 		return getHtml(`
 			<body class="iframe">
 			<div id="iframe_body">
-				<div id="msgs_scroller_div">
-					<div id="msg_div">
-						<div class="day_container">
-							<div class="day_msgs" id="day_msgs">
-							${messageBody}${cts}
-							<div id="l"></div>`, `
+				<div id="msg_div">
+					<div class="dc">
+						<div class="day_msgs" id="day_msgs">
+						${messageBody}${cts}
+						<a name="l"></a>`, `
 			<link rel="stylesheet" href="/app.css" />
 			<!-- <noscript> -->
-			<meta http-equiv="refresh" content="0; ?id=${Math.random()}" />
+			<meta http-equiv="refresh" content="0; ?ts=${ts}&id=${Math.random()}#l" />
 			<!-- </noscript> -->
 		`)
 	},
@@ -144,12 +153,9 @@ module.exports = {
 		}
 		return out
 	},
-	message(message, last) {
-		let sender = message.sender
-			.replace(/</g, '&lt;').replace(/>/g, '&gt;');
-
+	formatMessage(content) {
 		// sanitize
-		let content = message.content
+		content = content
 			.replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
 		let rpl = {"\\*":"b","_":"i","~":"strike","`":"code"}
@@ -158,7 +164,7 @@ module.exports = {
 		for (let key in rpl) {
 			let re = new RegExp(`(\\s?)${key}(.*?)${key}($|\\s)`,"gmi");
 			content = content.replace(
-				re, 
+				re,
 				`$1<${rpl[key]}>$2</${rpl[key]}>`
 			)
 		}
@@ -183,11 +189,17 @@ module.exports = {
 		// newlines
 		// replace \n with <br>
 		content = content.replace(/\n/gi, "<br>")
+		return content
+	},
+	message(message, last) {
+		let sender = message.sender
+
+		let content = message.content
 
 		let gutter = `
 			<div class="message_gutter">
 				<div class="message_icon">
-					<span 
+					<span
 						style="background-color: #${colors[sender[0].toLowerCase()] || "ccc"}"
 						class="member_image">
 							${sender[0]}

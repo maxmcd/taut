@@ -18,14 +18,12 @@
 			return JSON.parse(fs.readFileSync(`${__dirname}/messages.json`));
 		} catch(e) {
 			return [{
-				sender: "max", 
-				content: "default", 
+				sender: "max",
+				content: "default",
 				ts: new Date(8675309).getTime()
 			}]
 		}
 	})()
-
-
 
 	let getNic = (req) => {
 		var parts =  ("; " + req.headers.cookie).split("; nic=");
@@ -63,7 +61,7 @@
 					resp.end(content, 'utf-8');
 				});
 			} else {
-				resp.writeHead(200, { 
+				resp.writeHead(200, {
 					'Content-Type': "text/css",
 					'content-encoding':'gzip',
 				});
@@ -77,14 +75,6 @@
 		let urlParts = url.parse(req.url, true);
 		let path = urlParts.pathname;
 		let params = urlParts.query;
-
-		// only really there for long polling endpoints
-		// might cause some issues if other requests are
-		// actually taking this long to respond
-		let littleLessThanOneMin = 58000;
-		resp.setTimeout(littleLessThanOneMin, function(hm) {
-			resp.end('ended')
-		})
 
 		if (path === "/") {
 
@@ -110,15 +100,26 @@
 			serveAsset(resp, 'app.css')
 		} else if (path === "/messages") {
 
-			waiting.push([(message) => {
-				resp.end(templates.message(message));
-			}, getNic(req)]);
-
 			resp.writeHead(200, {
 				'Content-Type': 'text/html;',
 			});
-			resp.write(templates.messages(messages, true), 'utf-8');
 
+			let littleLessThanOneMin = 58000;
+			resp.setTimeout(littleLessThanOneMin, function(hm) {
+				resp.end(templates.messages(messages, false, lastTs), 'utf-8');
+			})
+
+			let ts = params.ts
+
+			let lastTs = messages[messages.length-1].ts
+
+			if (ts && ts == lastTs) {
+				waiting.push([(message) => {
+					resp.end(templates.messages(messages, false, message.ts), 'utf-8');
+				}, getNic(req)]);
+			} else {
+				resp.end(templates.messages(messages, false, lastTs), 'utf-8');
+			}
 		} else if (path === "/messages.json") {
 
 			resp.writeHead(200, {
@@ -128,7 +129,7 @@
 				msgs: templates.messagesArray(messages),
 				people: templates.ppls(people()),
 			}
-			
+
 			resp.end(JSON.stringify(data), 'utf-8');
 
 		} else if (path === "/ping") {
@@ -137,6 +138,11 @@
 			});
 			resp.end("pong")
 		} else if (path === "/is-new-message") {
+
+			let littleLessThanOneMin = 58000;
+			resp.setTimeout(littleLessThanOneMin, function(hm) {
+				resp.end("yes");
+			})
 
 			waiting.push([() => {
 				resp.end("yes");
@@ -147,12 +153,11 @@
 			req.on('data', (body) => {
 
 				let bodyParams = querystring.parse(body.toString('utf8'))
-
 				onlinePeople[getNic(req)] = new Date().getTime()
 
 				let msg = {
-					sender: getNic(req),
-					content: bodyParams.message,
+					sender: getNic(req).replace(/</g, '&lt;').replace(/>/g, '&gt;'),
+					content: templates.formatMessage(bodyParams.message),
 					ts: new Date().getTime(),
 				}
 
@@ -185,11 +190,11 @@
 
 
 	console.log(`Server running on port ${port}`);
-	
+
 	process.stdin.resume();
 	let save = () => {
 		fs.writeFileSync(`${__dirname}/messages.json`, JSON.stringify(messages))
-		console.log(`${messages.length} messages saved!`);		
+		console.log(`${messages.length} messages saved`);
 	}
 	process.on('exit', function () {
 		save()
@@ -202,7 +207,7 @@
 	process.on('SIGTERM', function() {
     	process.exit(0);
 	});
-	
+
 	process.once('SIGUSR2', function() {
 		console.log('SIGUSR2')
 		save()

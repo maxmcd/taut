@@ -23,3 +23,4 @@ Run `gulp watch` to run locally.
 ## Resources
 
  - http://codeflow.org/entries/2010/aug/25/javascript-compression-madness/
+ - http://js1k.com/2010-first/details/704

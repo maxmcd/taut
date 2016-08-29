@@ -71,7 +71,7 @@
                     let messages = data.msgs
 
                     let ppl = data.people
-                    document.getElementById('im-list').innerHTML = ppl.join("")
+                    document.getElementById('ili').innerHTML = ppl.join("")
 
                     var messageBody = "";
                     for (var i=0;i<messages.length;i++) {
