@@ -1,0 +1,1 @@
+message=foo http://www.google.com *bold*
