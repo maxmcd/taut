@@ -285,7 +285,7 @@
 		fs.readFile(`${__dirname}/${filename}.gz`, function(error, content) {
 			if (error) {
 				fs.readFile(`${__dirname}/${filename}`, function(error, content) {
-					resp.writeHead(200, { 'Content-Type': "text/css" });
+					htmlResp(resp, 'text/css')
 					resp.end(content, 'utf-8');
 				});
 			} else {
@@ -299,6 +299,9 @@
 
 	}
 
+	let htmlResp = function(resp, contentType) {
+		resp.writeHead(200, {'Content-Type': (contentType||'text/html')});
+	}
 
 	http.createServer(function (req, resp) {
 
@@ -319,7 +322,7 @@
 					nicResponse(nic, resp, params)
 				})
 			} else {
-				resp.writeHead(200, {'Content-Type': 'text/html'});
+				htmlResp(resp)
 				let nic = getNic(req)
 				nicResponse(nic, resp, params)
 			}
@@ -330,9 +333,7 @@
 			serveAsset(resp, 'app.css')
 		} else if (path === "/messages") {
 
-			resp.writeHead(200, {
-				'Content-Type': 'text/html;',
-			});
+			htmlResp(resp)
 
 			let littleLessThanOneMin = 58000;
 			resp.setTimeout(littleLessThanOneMin, function(hm) {
@@ -352,9 +353,8 @@
 			}
 		} else if (path === "/messages.json") {
 
-			resp.writeHead(200, {
-				'Content-Type': 'application/json;',
-			});
+			htmlResp(resp, 'application/json')
+
 			let data = {
 				msgs: templateMessagesArray(messages),
 				people: templatePpls(people()),
@@ -363,9 +363,7 @@
 			resp.end(JSON.stringify(data), 'utf-8');
 
 		} else if (path === "/ping") {
-			resp.writeHead(200, {
-				'Content-Type': 'text/plain;',
-			});
+			htmlResp(resp)
 			resp.end("pong")
 		} else if (path === "/is-new-message") {
 

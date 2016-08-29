@@ -16,6 +16,7 @@ gulp.task('server', function() {
     .pipe(uglify())
     .pipe(replace(/\\t|\\r/g, '')) // remove whitespace from template strings
     .pipe(replace(/>\\n/g, '>'))
+    .pipe(replace(/function\(([a-z, ]+)\)/gi, '($1)=>'))
     .pipe(gulp.dest('dist'));    
 })
 gulp.task('client', () => {
