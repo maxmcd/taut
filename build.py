@@ -1,5 +1,5 @@
 
-template = "X = '%s';for (Y = 31; Y;) X = X.replace(RegExp(String.fromCharCode(Y), 'g'), '%s'.split('*')[--Y]);"
+template = "X = '%s';for (Y = 2; Y;) X = X.replace(RegExp(String.fromCharCode(Y), 'g'), '%s'.split('*')[--Y]);console.log(X)"
 import sys
 import json 
 
@@ -22,10 +22,12 @@ def find_best(data):
     return sorted(symbols, key=symbols.__getitem__)[-1]
 
 data = sys.stdin.read().strip()
-symbols = []
-for n in range(31):
-    n += 1
-    if n in [13, 10, 9]:
+symbols = ["'", '"']
+for n in range(2):
+    n = n + 1
+    if n in [1,2]:
+        data = data.replace(symbols[n-1], chr(n))
+    elif n in [13, 10, 9]:
         symbols.append('')
     else:
         sequence = find_best(data)
@@ -35,7 +37,7 @@ for n in range(31):
 symbols.reverse()
 print symbols
 
-code = template % (data, "*".join(symbols))
+code = template % (data.replace("'","\\'"), "*".join(symbols).replace("'","\\'"))
 f = open('try.js','w')
 f.write(code)
 f.close()
