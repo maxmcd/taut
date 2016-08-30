@@ -1,0 +1,32 @@
+Jeremy Hall, Aug 17, 3:36 PM PDT
+
+Hi Max,
+
+Thanks for reaching out.
+
+As it stands, the visual appearance of your app is fine, and as long as y=
+ou don't use our brand or suggest any affiliation you shouldn't violate o=
+ur guidelines. We would very much prefer that you didn't name your projec=
+t "S10ck" (which is close enough to Slack that it might confuse people), =
+but it's fine if you want to describe your project as "similar to Slack",=
+ a "Slack clone" or "Slack-adjacent".
+
+Adding a disclaimer stating that your product is not created by, affiliat=
+ed with, or supported by Slack Technologies, Inc. would also be appreciat=
+ed.
+
+I encourage you to review our Terms of Service (https://slack.com/terms-o=
+f-service) as you continue to develop your app, and good luck with your c=
+ontest!
+
+Best,
+Jeremy =
+
+
+--
+Follow us on Twitter: @slackhq (https://twitter.com/slackhq) for tips, an=
+nouncements, and the Slack #changelog (https://twitter.com/search?f=3Drea=
+ltime&q=3D%23changelog%20from%3Aslackhq)
+
+--------------------------------
+This email is a service from Slack.
