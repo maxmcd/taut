@@ -14,8 +14,9 @@ gulp.task('server', function() {
         presets: ['es2015']
     }))
     .pipe(uglify())
-    .pipe(replace(/\\t|\\r/g, '')) // remove whitespace from template strings
-    .pipe(replace(/>\\n/g, '>'))
+    .pipe(replace("/\\n/", "wellIsntthisunique"))
+    .pipe(replace(/\\t|\\r|\\n/g, '')) // remove whitespace from template strings
+    .pipe(replace("wellIsntthisunique", "/\\n/"))
     .pipe(replace(/function\(([a-z, ]+)\)/gi, '($1)=>'))
     .pipe(gulp.dest('dist'));    
 })

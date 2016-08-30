@@ -1,6 +1,3 @@
- - Add support for native notifications
- - Keep thinking about emojis
- - add scrolling to noscript iframe with anchor tags - this doesn't work
- - add more style to view, figure out a better way to choose a nickname
- - format messages on receipt, not on the fly
- - you want the whole page to load, and then hang with no content waiting for another message
+ - Add support for native notifications (maybe)
+ - es6 function replacement can be improved
+ - 

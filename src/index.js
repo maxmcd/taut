@@ -7,21 +7,34 @@
 	const crypto = require('crypto');
 
 	const port = 8125
+	const littleLessThanOneMin = 58000;
 
 	const waiting = [];
 	const onlinePeople = {};
 
-	const messages = (function() {
+	let data = (function() {
 		try {
-			return JSON.parse(fs.readFileSync(`${__dirname}/messages.json`));
+			return JSON.parse(fs.readFileSync(`${__dirname}/data.json`));
 		} catch(e) {
-			return [{
-				sender: "max",
-				content: "default",
-				ts: new Date(8675309).getTime()
-			}]
+			return {m: [], u: {}, s: {}}
 		}
 	})()
+
+	const messages = data.m
+	const users = data.u
+	const sessions = data.s
+
+	const hash = (string) => {
+		return crypto.createHash('sha256')
+			.update(string)
+			.digest('hex');
+	}
+
+	const newSession = (nic) => {
+		let s = hash(nic + new Date().getTime())
+		sessions[s] = nic
+		return s
+	}
 
 	const getHtml = (body, header) => {
 		if (!header)
@@ -34,9 +47,7 @@
 			<meta charset="UTF-8">
 			<meta name="viewport" content="width=device-width, initial-scale=1.0">
 			<title>Taut</title>
-			${header}
-		</head>
-		${body}
+			<link rel="stylesheet" href="/app.css" />${header}</head>${body}
 		`
 	}
 
@@ -51,7 +62,7 @@
 	const templateIndex = function (members) {
 		if (!members) members=0;
 
-		let header = `<link rel="stylesheet" href="/app.css" />`
+		let header = ``
 
 		let inputAttributes = `
 			autofocus
@@ -59,15 +70,14 @@
 			placeholder="Message #general"
 			autocorrect="off"
 			autocomplete="off"
-			spellcheck="true"
-		`
+			spellcheck="true"`
 
 		let body = `
 			<body>
 			<div id="client-ui">
 				<header>
 					<div id="team_menu">
-						<span id="team_name">Taut</span>
+						<span id="tn">Taut</span>
 						<li class="usr">
 							<span class="presence active"></span>
 							max
@@ -76,25 +86,27 @@
 					<div id="ch">
 						<div id="ct">#general</div>
 						<div id="chi">${members} members</div>
+						<a href="/signout" id="so">sign out</a>
 					</div>
 				</header>
-				<div id="footer">
-					<div id="footer_msgs">
-						<div id="mic">
-							<form action="/message" method="post" target="" id="message-form" onsubmit="newMessage();return false;">
-								<noscript>
-									<input name="message" ${inputAttributes}/>
-								</noscript>
-								<textarea ${inputAttributes} /></textarea>
-							</form>
-						</div>
+				<div id="f">
+					<div id="mic">
+						<form action="/message" method="post" target="" id="message-form" onsubmit="newMessage();return false;">
+							<noscript>
+								<input name="message" ${inputAttributes}/>
+							</noscript>
+							<textarea ${inputAttributes} /></textarea>
+						</form>
 					</div>
 				</div>
-				<div id="client_body">
-					<div id="col_messages">
+				<div id="cb">
+					<div id="cm">
 						<div class="row-fluid">
 							<div id="ccb"></div>
 							<div id="cc">
+								<noscript>
+									<iframe name="mc" src="/messages?id=${Math.random()}#l" frameborder="0"></iframe>
+								</noscript>
 								<ul id="im-list">
 									<li class="usr active">
 										# general
@@ -106,11 +118,11 @@
 								<iframe name="mc" src="/messages?id=${Math.random()}#l" frameborder="0"></iframe>
 							</noscript>
 							<div id="mc">
-								<div id="connection_div">Connection lost. Reconnecting...</div>
+								<div id="cd">Connection lost. Reconnecting...</div>
 								<div id="msd">
-									<div id="msg_div">
+									<div>
 										<div id="dc">
-											<div class="day_msgs" id="day_msgs">
+											<div id="dm">
 											</div>
 										</div>
 									</div>
@@ -133,16 +145,23 @@
 			</li>`
 		})
 	}
-	const templateForm = function () {
+	const templateForm = function (notice) {
 		return getHtml(`
-			<div class="card">
-
+			<body class="signup">
+				<div class="card">
+					<form method="post">
+						<h2>Sign up or log in to taut</h2>
+						<p>${notice||''}</p>
+						<input type="text" name="nic" placeholder="username" autofocus>
+						<input type="password" name="password" placeholder="password">
+						<input type="submit" class="btn" />
+						<p><small>Taut is a slack clone in 10K. View the 
+						<a href="//github.com/maxmcd/taut">source and info</a>. 
+						Taut is not created by, affiliated with, or supported 
+						by Slack Technologies, Inc.</small></p>
+					</form>
+				</div>
 			</div>
-			<form method="post">
-				<p>Enter a nickname:</p>
-				<input type="text" name="nic">
-				<input type="submit" />
-			</form>
 		`)
 	}
 	const templateMessages = function (messages, noClosingTags, ts) {
@@ -157,10 +176,9 @@
 			<div id="iframe_body">
 				<div id="msg_div">
 					<div class="dc">
-						<div class="day_msgs" id="day_msgs">
+						<div id="dm">
 						${messageBody}${cts}
 						<a name="l"></a>`, `
-			<link rel="stylesheet" href="/app.css" />
 			<!-- <noscript> -->
 			<meta http-equiv="refresh" content="0; ?ts=${ts}&id=${Math.random()}#l" />
 			<!-- </noscript> -->
@@ -244,9 +262,9 @@
 		return `
 			<ts-message>
 				${gutter}
-				<div class="message_content ">
+				<div class="mco">
 					${meta}
-					<span class="message_body">${content}</span>
+					<span class="mb">${content}</span>
 				</div>
 			</ts-message>
 		`
@@ -254,8 +272,9 @@
 
 
 	let getNic = (req) => {
-		var parts =  ("; " + req.headers.cookie).split("; nic=");
-		if (parts.length == 2) return parts.pop().split(";").shift();
+		var session;
+		var parts =  ("; " + req.headers.cookie).split("; session=");
+		if (parts.length == 2) return sessions[parts.pop().split(";").shift()];
 	}
 
 	let nicResponse = (nic, resp, params, taken) => {
@@ -309,24 +328,49 @@
 		let path = urlParts.pathname;
 		let params = urlParts.query;
 
-		if (path === "/") {
+		let forUser = path.match(/^@(.*)$/i)
+		if (forUser) forUser = forUser[1];
+
+		if (path === "/" || forUser) {
 
 			if (req.method == "POST") {
 				req.on('data', (body) => {
-					let nic = decodeURIComponent(body.toString('utf8').replace("nic=", ""))
-					resp.writeHead(302, {
-						'Content-Type': 'text/html',
-						'Set-Cookie':`nic=${nic}`,
-						'Location':'/',
-					});
-					nicResponse(nic, resp, params)
+					let form = url.parse("?"+body.toString('utf8'), true).query
+					let notice
+					if (!form.nic || !form.password) {
+						notice = "Username or password can't be blank!"
+					} else {
+						var k = hash(form.password)
+						if (users[form.nic] && users[form.nic] != k) {
+							notice = "Incorrect password, or username is already taken!"
+						} else {
+							users[form.nic] = k
+						}
+					}
+					if (notice) {
+						htmlResp(resp)
+						resp.end(templateForm(notice), 'utf-8');
+					} else {
+						resp.writeHead(302, {
+							'Content-Type': 'text/html',
+							'Set-Cookie':`session=${newSession(form.nic)}`,
+							'Location':'/',
+						});
+						nicResponse(form.nic, resp, params)
+					}
 				})
 			} else {
 				htmlResp(resp)
 				let nic = getNic(req)
 				nicResponse(nic, resp, params)
 			}
-
+		} else if (path === "/signout") {
+			resp.writeHead(302, {
+				'Content-Type': 'text/html',
+				'Set-Cookie':`session=`,
+				'Location':'/',
+			});
+			resp.end()
 		} else if (path === "/client.js") {
 			serveAsset(resp, 'client.js')
 		} else if (path === "/app.css") {
@@ -335,8 +379,7 @@
 
 			htmlResp(resp)
 
-			let littleLessThanOneMin = 58000;
-			resp.setTimeout(littleLessThanOneMin, function(hm) {
+			resp.setTimeout(littleLessThanOneMin, function() {
 				resp.end(templateMessages(messages, false, lastTs), 'utf-8');
 			})
 
@@ -367,8 +410,7 @@
 			resp.end("pong")
 		} else if (path === "/is-new-message") {
 
-			let littleLessThanOneMin = 58000;
-			resp.setTimeout(littleLessThanOneMin, function(hm) {
+			resp.setTimeout(littleLessThanOneMin, function() {
 				resp.end("yes");
 			})
 
@@ -421,8 +463,11 @@
 
 	process.stdin.resume();
 	let save = () => {
-		fs.writeFileSync(`${__dirname}/messages.json`, JSON.stringify(messages))
-		console.log(`${messages.length} messages saved`);
+		fs.writeFileSync(
+			`${__dirname}/data.json`, 
+			JSON.stringify({s: sessions, u: users, m: messages})
+		)
+		console.log(`saved!`);
 	}
 	process.on('exit', function () {
 		save()

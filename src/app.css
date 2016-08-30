@@ -23,15 +23,64 @@ body.iframe {
 	overflow-y: scroll
 }
 
+body.signup {
+    background: #f9f9f9;
+}
+
+#so {
+    position: absolute;
+    color: #9e9ea6;
+    right: 10px;
+    top: 10px;
+    font-size: 13px;
+}
+
+input[type=text], input[type=password] {
+    font-size: 1.25rem;
+    padding: .75rem;
+    border: 1px solid #C5C5C5;
+    border-radius: .25rem;
+    outline: 0;
+    color: #555459;
+    width: 100%;
+    max-width: 100%;
+    margin: 0 0 .5rem;
+    box-shadow: none;
+    height: auto;
+}
+
+input[type=text]:focus, input[type=password]:focus {
+    border-color: #2780f8;
+    box-shadow: 0 0 7px #2780f826;
+    outline-offset: 0;
+    outline: 0;
+}
 
 .card {
     background-color: #fff;
     border-radius: .25rem;
-    box-shadow: 0 1px 0 #00000040;
-    padding: 2rem 2rem 1rem;
+    box-shadow: 0 1px 0 #d3d3d3;
+    padding: 2rem 2rem 4rem;
     margin: 0 auto 2rem;
-    position: relative;
+    margin-top: 70px;
     border: 1px solid #e8e8e8;
+    width: 400px;
+    max-width: 100%;
+}
+
+.btn {
+    width: 100%;
+    padding: 14px 32px 16px;
+    font-size: 1.25rem;
+    background: #2ab27b;
+    color: #fff;
+    line-height: 1.2rem;
+    font-weight: 900;
+    text-shadow: 0 1px 1px rgba(0,0,0,0.1);
+    border: none;
+    border-radius: .25rem;
+    text-align: center;
+    cursor: pointer;
 }
 
 code {
@@ -102,7 +151,6 @@ ul {
     display: inline-block;
     vertical-align: baseline;
     background: 0 0;
-    position: relative;
     background-color: #99D04A;
     border-radius: 100%;
     margin-right: 5px;
@@ -114,7 +162,6 @@ li.usr {
     line-height: 1.5rem;
     height: 1.5rem;
     margin-right: 1px;
-    position: relative;
     clear: both;
     opacity: 0.6;
     padding-left: 16px;
@@ -148,11 +195,11 @@ li.usr.active {
     line-height: 1.375rem;
     z-index: 25;
 }
-#team_name {
+#tn {
     font-weight: 900;
 }
 
-#team_menu #team_name {
+#team_menu #tn {
     font-size: 1.125rem;
     line-height: 1.375rem;
     max-width: 9.12rem;
@@ -165,7 +212,7 @@ li.usr.active {
 	z-index: 25;
 }
 
-#col_messages {
+#cm {
 	margin-left: 0;
 	position: relative;
 }
@@ -187,13 +234,9 @@ li.usr.active {
 	font-size: .9375rem;
 	line-height: 1.2rem;
 	border: 2px solid #E0E0E0;
-	// border-left: none;
-	background-clip: padding-box;
 	margin: 0;
 	color: #3d3c40;
-	box-shadow: none;
 	outline: 0;
-	position: absolute;
 	bottom: 0;
 	min-height: 2.625rem!important;
 	padding: .5625rem 2.5rem .5625rem .5rem;
@@ -216,20 +259,17 @@ li.usr.active {
 	box-shadow: none;
 }
 
-#footer {
+#f {
 	position: fixed;
 	bottom: 0;
 	left: 220px;
 	right: 1rem;
 	z-index: 52;
-}
-
-#footer:not(.footer_msg_input) {
 	height: 4rem;
 	background: #fff;
 }
 
-#client_body:before {
+#cb:before {
 	position: absolute;
 	z-index: 98;
 	left: 220px;
@@ -260,11 +300,11 @@ li.usr.active {
 	top: .5rem;
 }
 
-#col_messages, .row-fluid, #mc {
+#cm, .row-fluid, #mc {
 	height: 100%;
 }
 
-#client_body {
+#cb {
 	margin-top: 3.3125rem;
     position: fixed;
     width: 100%;
@@ -346,7 +386,7 @@ textarea {
 	*/
 }
 
-.message_body {
+.mb {
 	display: block;
 	cursor: text;
 
@@ -362,20 +402,20 @@ blockquote {
     padding-left: 12px;
 }
 
-.message_content {
+.mco {
 	margin-top: .0625rem;
 	margin-left: 4.5rem;
 }
 
-.message_content a {
+.mco a {
     color: #2a80b9;
 }
 
-.message_content a:hover {
+.mco a:hover {
     text-decoration: underline;
 }
 
-#dc .day_msgs {
+#dm {
 	margin: -18px 0 0;
 	padding: 1.75rem 0 1.25rem;
 	border-top: 1px solid #e8e8e8;
@@ -401,7 +441,7 @@ ts-message {
 	word-wrap: break-word;
 }
 
-#connection_div {
+#cd {
     display: none;
     color: #fff;
     text-align: center;
@@ -412,19 +452,12 @@ ts-message {
     border-radius: .375rem;
     margin-left: 1rem;
     margin-right: .5rem;
-    -webkit-transition: background .1s ease-out 0s;
-    -moz-transition: background .1s ease-out 0s;
-    transition: background .1s ease-out 0s;
     position: absolute;
     top: 1.5rem;
     left: 0;
     right: 1rem;
     height: 1.5625rem;
     text-shadow: 0 1px #00000026;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
     z-index: 99;
     height: 26px;
     line-height: 1.125rem;
@@ -443,10 +476,10 @@ ts-message {
     #mc, #ch {
         margin-left: 0px;
     }
-    #client_body:before {
+    #cb:before {
         left: 0px;
     }
-    #footer {
+    #f {
         left: 0px;
     }
     iframe {

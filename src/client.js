@@ -1,6 +1,6 @@
 (function() {
     var lastTs;
-    var cd = document.getElementById("connection_div")
+    var cd = document.getElementById("cd")
 
     window.newMessage = function() {
         var url = "/message?ajax=true",
@@ -78,7 +78,7 @@
                     for (var i=0;i<messages.length;i++) {
                         messageBody += messages[i]
                     }
-                    document.getElementById('day_msgs').innerHTML = messageBody
+                    document.getElementById('dm').innerHTML = messageBody
                     var x = document.getElementsByClassName("timestamp");
                     for (var i=0;i<x.length;i++) {
                         var d = new Date(Number(x[i].getAttribute('data-ts')))
