@@ -18,9 +18,15 @@ body {
 	color: #555459;
 	padding: 0;
 	overflow: hidden;
+    margin: 0;
 }
-body.iframe {
-	overflow-y: scroll
+
+.scrollY {
+	overflow-y: scroll;
+}
+
+.transparentB {
+    background: transparent;
 }
 
 body.signup {
@@ -292,6 +298,7 @@ li.usr.active {
 }
 
 #cc {
+    height: 100%;
 	background: #4D5250;
 	color: #ab9ba9;
 	width: 220px;
@@ -313,20 +320,27 @@ li.usr.active {
     top: 0px;
 }
 
-#mc, iframe {
+#mc, iframe#m {
     position: relative;
     margin-left: 220px;
     height: 100%;
     display: block;
 }
-#msd, iframe {
+#mc {
+    display: none;
+}
+#cm #im-list {
+    display: none;
+}
+#msd, iframe#m {
     overflow-y: scroll;
     height: 100%;
     padding-bottom: 140px;
 }
-iframe {
+iframe#m {
+    position: absolute;
 	width: 100%;
-    top: -30px;
+    top: 0px;
     padding-bottom: 120px;
 }
 textarea {
@@ -334,11 +348,11 @@ textarea {
 }
 
 
-.message_gutter {
+.mg {
 	width: 4.5rem;
 	padding-right: .625rem;
 }
-.message_gutter {
+.mg {
 	text-align: right;
 	position: absolute;
 	top: 0;
@@ -356,12 +370,12 @@ textarea {
 	line-height: 1.125rem;
 }
 
-.message_icon {
+.mi {
 	margin-top: .25rem;
 	display: block;
 }
 
-.member_image {
+.memi {
 	border-radius: .2rem;
 	background-size: 100%;
 	background-repeat: no-repeat;
@@ -482,7 +496,7 @@ ts-message {
     #f {
         left: 0px;
     }
-    iframe {
+    iframe#m {
         margin-left: 0;
         top: 3px;
     }

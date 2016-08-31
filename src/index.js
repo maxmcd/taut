@@ -59,17 +59,16 @@
 		colors[String.fromCharCode(i)] = colorKey.substring(colorIndex, colorIndex+3)
 	}
 
-	const templateIndex = function (members) {
+	const templateIndex = function (members, nic) {
 		if (!members) members=0;
 
 		let header = ``
 
 		let inputAttributes = `
-			autofocus
-			id="message-input"
-			placeholder="Message #general"
-			autocorrect="off"
-			autocomplete="off"
+			autofocus id="message-input" 
+			placeholder="Message #general" 
+			autocorrect="off" 
+			autocomplete="off" 
 			spellcheck="true"`
 
 		let body = `
@@ -80,7 +79,7 @@
 						<span id="tn">Taut</span>
 						<li class="usr">
 							<span class="presence active"></span>
-							max
+							${nic}
 						</li>
 					</div>
 					<div id="ch">
@@ -104,18 +103,18 @@
 						<div class="row-fluid">
 							<div id="ccb"></div>
 							<div id="cc">
-								<noscript>
-									<iframe name="mc" src="/messages?id=${Math.random()}#l" frameborder="0"></iframe>
-								</noscript>
 								<ul id="im-list">
 									<li class="usr active">
 										# general
 									</li>
 									<div id="ili"></div>
 								</ul>
+								<noscript>
+									<iframe src="/people" frameborder="0"></iframe>
+								</noscript>
 							</div>
 							<noscript>
-								<iframe name="mc" src="/messages?id=${Math.random()}#l" frameborder="0"></iframe>
+								<iframe id="m" name="mc" src="/messages?id=${Math.random()}#l" frameborder="0"></iframe>
 							</noscript>
 							<div id="mc">
 								<div id="cd">Connection lost. Reconnecting...</div>
@@ -145,6 +144,24 @@
 			</li>`
 		})
 	}
+	const templatePeopleList = function(peoples) {
+		return getHtml(`
+			<body class="transparentB">
+			<div id="iframe_body">
+				<ul id="im-list">
+					<li class="usr active">
+						# general
+					</li>
+					<div id="ili">
+					${templatePpls(peoples).join()}
+					</div>
+				</ul>
+			</div>
+			</body>`,`
+			<!-- <noscript> -->
+			<meta http-equiv="refresh" content="30" />
+			<!-- </noscript> -->`)
+	}
 	const templateForm = function (notice) {
 		return getHtml(`
 			<body class="signup">
@@ -172,7 +189,7 @@
 		if (noClosingTags) cts=``;
 
 		return getHtml(`
-			<body class="iframe">
+			<body class="scrollY">
 			<div id="iframe_body">
 				<div id="msg_div">
 					<div class="dc">
@@ -238,11 +255,11 @@
 		let content = message.content
 
 		let gutter = `
-			<div class="message_gutter">
-				<div class="message_icon">
-					<span
+			<div class="mg">
+				<div class="mi">
+					<span 
 						style="background-color: #${colors[sender[0].toLowerCase()] || "ccc"}"
-						class="member_image">
+						class="memi">
 							${sender[0]}
 					</span>
 				</div>
@@ -272,7 +289,6 @@
 
 
 	let getNic = (req) => {
-		var session;
 		var parts =  ("; " + req.headers.cookie).split("; session=");
 		if (parts.length == 2) return sessions[parts.pop().split(";").shift()];
 	}
@@ -280,7 +296,7 @@
 	let nicResponse = (nic, resp, params, taken) => {
 		if (nic) {
 			onlinePeople[nic] = new Date().getTime()
-			resp.end(templateIndex(Object.keys(onlinePeople).length), 'utf-8');
+			resp.end(templateIndex(Object.keys(onlinePeople).length, nic), 'utf-8');
 		} else {
 			resp.end(templateForm(taken), 'utf-8');
 		}
@@ -315,7 +331,6 @@
 				resp.end(content, 'utf-8');
 			}
 		})
-
 	}
 
 	let htmlResp = function(resp, contentType) {
@@ -334,6 +349,7 @@
 		if (path === "/" || forUser) {
 
 			if (req.method == "POST") {
+
 				req.on('data', (body) => {
 					let form = url.parse("?"+body.toString('utf8'), true).query
 					let notice
@@ -344,7 +360,7 @@
 						if (users[form.nic] && users[form.nic] != k) {
 							notice = "Incorrect password, or username is already taken!"
 						} else {
-							users[form.nic] = k
+							users[form.nic.replace(/</g, '&lt;').replace(/>/g, '&gt;')] = k
 						}
 					}
 					if (notice) {
@@ -364,17 +380,25 @@
 				let nic = getNic(req)
 				nicResponse(nic, resp, params)
 			}
+			
 		} else if (path === "/signout") {
+
 			resp.writeHead(302, {
 				'Content-Type': 'text/html',
 				'Set-Cookie':`session=`,
 				'Location':'/',
 			});
 			resp.end()
+
 		} else if (path === "/client.js") {
 			serveAsset(resp, 'client.js')
 		} else if (path === "/app.css") {
 			serveAsset(resp, 'app.css')
+		} else if (path === "/people") {
+			
+			htmlResp(resp)
+			resp.end(templatePeopleList(people()))
+
 		} else if (path === "/messages") {
 
 			htmlResp(resp)
@@ -394,6 +418,7 @@
 			} else {
 				resp.end(templateMessages(messages, false, lastTs), 'utf-8');
 			}
+
 		} else if (path === "/messages.json") {
 
 			htmlResp(resp, 'application/json')
@@ -411,7 +436,7 @@
 		} else if (path === "/is-new-message") {
 
 			resp.setTimeout(littleLessThanOneMin, function() {
-				resp.end("yes");
+				resp.end("maybe");
 			})
 
 			waiting.push([() => {
@@ -425,8 +450,16 @@
 				let bodyParams = querystring.parse(body.toString('utf8'))
 				onlinePeople[getNic(req)] = new Date().getTime()
 
+				let nic = getNic(req);
+
+				if (!nic) {
+					resp.writeHead(400)
+					resp.end('400')
+					return
+				}
+
 				let msg = {
-					sender: getNic(req).replace(/</g, '&lt;').replace(/>/g, '&gt;'),
+					sender: nic,
 					content: templateFormatMessage(bodyParams.message),
 					ts: new Date().getTime(),
 				}

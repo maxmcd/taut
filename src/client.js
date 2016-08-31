@@ -100,6 +100,9 @@
 
     getMessages()
     checkIsNewMessage()
+    document.getElementById("mc").style.display = "block"
+    document.getElementById("im-list").style.display = "block"
+    
     var mi = document.getElementById("message-input")
     mi.style.display = "inherit"
     mi.addEventListener('keydown', function (e){
