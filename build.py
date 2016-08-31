@@ -1,5 +1,3 @@
-
-template = "X = '%s';for (Y = 2; Y;) X = X.replace(RegExp(String.fromCharCode(Y), 'g'), '%s'.split('*')[--Y]);console.log(X)"
 import sys
 import json 
 
@@ -23,21 +21,27 @@ def find_best(data):
 
 data = sys.stdin.read().strip()
 symbols = ["'", '"']
-for n in range(2):
-    n = n + 1
-    if n in [1,2]:
-        data = data.replace(symbols[n-1], chr(n))
+
+quantity = 4
+
+for n in range(quantity):
+    if n in [0,1]:
+        data = data.replace(symbols[n], chr(n+1))
     elif n in [13, 10, 9]:
         symbols.append('')
     else:
         sequence = find_best(data)
-        data = data.replace(sequence, chr(n))
+        data = data.replace(sequence, chr(n+1))
         symbols.append(sequence)
 
-symbols.reverse()
+# symbols.reverse()
 print symbols
 
-code = template % (data.replace("'","\\'"), "*".join(symbols).replace("'","\\'"))
+
 f = open('try.js','w')
-f.write(code)
+f.write("X = '")
+f.write(data)
+f.write("';for (Y = " + str(quantity) + "; Y;) X = X.replace(RegExp(String.fromCharCode(Y), 'g'), '")
+f.write("*".join(symbols).replace("'","\\'"))
+f.write("'.split('*')[--Y]);console.log(JSON.stringify(X))")
 f.close()
