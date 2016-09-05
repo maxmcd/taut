@@ -1,10 +1,33 @@
 # Taut
 
-My submission for the [10K Apart Challenge](https://a-k-apart.com/). A slack clone in 10K of js/css/html that works well in all modern browsers and is functional without clientside javascript.
+My submission for the [10K Apart Challenge](https://a-k-apart.com/). A Slack clone in 10K of js/css/html that works well in all modern browsers and is functional without clientside javascript.
 
-The limitations of this project are slightly different than the project rules. `gulp build` runs a build script that outputs files in the `/dist` directory. This directory contains all coded needed to run the application and its total size is less than 10 Kilobytes. The contest specifies that the 10K limitation just applies to files delivered to the browser, but I enjoyed the constraint of keeping the server code dependency-free and within the size constraint as well. 
+The limitations of this project are slightly different than the contest rules. `gulp build` runs a build script that outputs files in the `/dist` directory. This directory contains all coded needed to run the application and its total size is less than 10 Kilobytes. The contest specifies that the 10K limitation just applies to files delivered to the browser, but I enjoyed the constraint of keeping the server code dependency-free and within the size constraint as well. 
 
 Outside of the build process no external libraries are used other than what is natively provided by the browser and nodejs. 
+
+This project is not created by, affiliated with, or supported by Slack Technologies, Inc. Although they have been kind enough to [confirm](/notes/slack-email.txt) that this project is acceptable and does not violate their ToS. 
+
+## Features
+
+ - Group chat
+ - Persisting Login/Signup/Signout
+ - List of active users (5min timeout)
+ - Colorful user icons
+ - Text formatting (bold, italic, strikethrough, blockquote, code)
+ - Link detection
+ - Message grouping
+ - Chat and user list can work without javascript
+ - Login sessions
+ - Persisted data on server restart
+ - Formatted timestamps
+
+**Possible future features:**
+
+ - Channels or private messages
+ - Better emoji support :ghost:
+ - Media uploads
+ - Link scraping
 
 ## Development
 
@@ -16,9 +39,19 @@ Run `npm install` to install dev dependencies.
 
 Run `gulp build` to build project in build directory. Final folder contents should be less than 10K. You can check by running `./bin/size.sh`
 
+**Build Notes:**
+
+The build uses babel (es2015) and uglify for all javascript files. Serverside code also has more aggressive whitespace removal to deal with all the whitespace in template strings. Server functions are also replaced with ES6 functions in certain places. 
+
+`./build.py` contains work-in-progress code for more aggressive size reduction based on methodologies used in js1k entries. This might be completed in the future to make space for more features. This build process would not be helpful for clientside code as gzip provides superior compression benefits. 
+
 ### Run
 
 Run `gulp watch` to run locally. 
+
+## Contributing
+
+I would be honored to receive any contributions. This is the first time I've built a web application with a size constraint in mind. I'm sure there's much that could be improved upon and am open to any and all suggestions. Feel free to email me or open a PR.
 
 ## Resources
  - http://blog.johnkrauss.com/html-only-live-chat-No-JS/
