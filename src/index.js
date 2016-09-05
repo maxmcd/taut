@@ -167,7 +167,7 @@
 			<body class="signup">
 				<div class="card">
 					<form method="post">
-						<h2>Sign up or log in to taut</h2>
+						<h2>Sign up or log in to Taut</h2>
 						<p>${notice||''}</p>
 						<input type="text" name="nic" placeholder="username" autofocus>
 						<input type="password" name="password" placeholder="password">
@@ -212,6 +212,7 @@
 	}
 	const templateFormatMessage = function (content) {
 		// sanitize
+		// this seems like enough, is this enough?
 		content = content
 			.replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
@@ -333,8 +334,8 @@
 		})
 	}
 
-	let htmlResp = function(resp, contentType) {
-		resp.writeHead(200, {'Content-Type': (contentType||'text/html')});
+	let htmlResp = function(resp, contentType, status) {
+		resp.writeHead((status||200), {'Content-Type': (contentType||'text/html')});
 	}
 
 	http.createServer(function (req, resp) {
@@ -356,6 +357,7 @@
 					if (!form.nic || !form.password) {
 						notice = "Username or password can't be blank!"
 					} else {
+						// This is bad, do not hash like this
 						var k = hash(form.password)
 						if (users[form.nic] && users[form.nic] != k) {
 							notice = "Incorrect password, or username is already taken!"
@@ -364,13 +366,13 @@
 						}
 					}
 					if (notice) {
-						htmlResp(resp)
+						htmlResp(resp, null, 400)
 						resp.end(templateForm(notice), 'utf-8');
 					} else {
-						resp.writeHead(302, {
+						resp.writeHead(200, {
 							'Content-Type': 'text/html',
-							'Set-Cookie':`session=${newSession(form.nic)}`,
-							'Location':'/',
+							'Set-Cookie':`session=${newSession(form.nic)} ;expires=${new Date(1999999999999).toGMTString()}`,
+							// 'Location':'/',
 						});
 						nicResponse(form.nic, resp, params)
 					}

@@ -21,6 +21,10 @@ body {
     margin: 0;
 }
 
+textarea, input {
+    font-family: "Helvetica Neue",Helvetica,"Segoe UI",Tahoma,Arial,sans-serif;
+}
+
 .scrollY {
 	overflow-y: scroll;
 }
@@ -115,7 +119,6 @@ header {
 	height: 3.3125rem;
 	position: fixed;
 	z-index: 200;
-	min-width: 768px;
 	width: 100%;
 }
 
@@ -334,14 +337,16 @@ li.usr.active {
 }
 #msd, iframe#m {
     overflow-y: scroll;
-    height: 100%;
-    padding-bottom: 140px;
+    // height: 100%;
+    // padding-bottom: 140px;
+    height: 80%;
+    height: calc(100% - 120px);
 }
 iframe#m {
     position: absolute;
 	width: 100%;
     top: 0px;
-    padding-bottom: 120px;
+    // padding-bottom: 120px;
 }
 textarea {
     display: none;
