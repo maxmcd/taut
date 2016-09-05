@@ -318,15 +318,16 @@
 	}
 
 	let serveAsset = (resp, filename) => {
+		let contentType = filename.slice(-2) == "js" ? "application/javascript" : "text/css"
 		fs.readFile(`${__dirname}/${filename}.gz`, function(error, content) {
 			if (error) {
 				fs.readFile(`${__dirname}/${filename}`, function(error, content) {
-					htmlResp(resp, 'text/css')
+					htmlResp(resp, contentType)
 					resp.end(content, 'utf-8');
 				});
 			} else {
 				resp.writeHead(200, {
-					'Content-Type': "text/css",
+					'Content-Type': contentType,
 					'content-encoding':'gzip',
 				});
 				resp.end(content, 'utf-8');

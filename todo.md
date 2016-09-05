@@ -1,3 +1,3 @@
  - Add support for native notifications (maybe)
  - es6 function replacement can be improved
- - 
+ - display pending message immediately to counteract sluggish response when geographically distant
