@@ -354,16 +354,20 @@
 
 				req.on('data', (body) => {
 					let form = url.parse("?"+body.toString('utf8'), true).query
+
+					// sanitize
+					form.nic = form.nic.replace(/</g, '&lt;').replace(/>/g, '&gt;')
+
 					let notice
 					if (!form.nic || !form.password) {
 						notice = "Username or password can't be blank!"
 					} else {
-						// This is bad, do not hash like this
+						// This is bad, do not hash like this, just use bcrypt
 						var k = hash(form.password)
 						if (users[form.nic] && users[form.nic] != k) {
 							notice = "Incorrect password, or username is already taken!"
 						} else {
-							users[form.nic.replace(/</g, '&lt;').replace(/>/g, '&gt;')] = k
+							users[form.nic] = k
 						}
 					}
 					if (notice) {
