@@ -1,0 +1,5 @@
+#! /bin/bash
+set -e
+ssh root@104.131.126.76 "forever stopall"
+ssh root@104.131.126.76 "rm taut/data.json"
+ssh root@104.131.126.76 "cd taut; forever --killSignal=SIGUSR2 start index.js"

@@ -24,9 +24,25 @@
 	const users = data.u
 	const sessions = data.s
 
+	const genPassword = (password) => {
+		let salt = hash(new Date().getTime())
+		return `${salt}.${hashMany(password + salt)}`
+	}
+
+	const checkPassword = (password, hashedPass) => {
+		let parts = hashedPass.split('.')
+		return hashMany(password + parts[0]) == parts[1]
+	}
+
+	const hashMany = (string) => {
+		for (let i=0;i<1000;i++) {
+			string = hash(string)
+		}
+		return string
+	}
 	const hash = (string) => {
 		return crypto.createHash('sha256')
-			.update(string)
+			.update(String(string))
 			.digest('hex');
 	}
 
@@ -363,11 +379,11 @@
 						notice = "Username or password can't be blank!"
 					} else {
 						// This is bad, do not hash like this, just use bcrypt
-						var k = hash(form.password)
-						if (users[form.nic] && users[form.nic] != k) {
+						let hashedPass = users[form.nic]
+						if (hashedPass && !checkPassword(form.password, hashedPass)) {
 							notice = "Incorrect password, or username is already taken!"
 						} else {
-							users[form.nic] = k
+							users[form.nic] = genPassword(form.password)
 						}
 					}
 					if (notice) {
@@ -499,7 +515,7 @@
 	}).listen(port);
 
 
-	console.log(`Server running on port ${port}`);
+	console.log(`Running on port ${port}`);
 
 	process.stdin.resume();
 	let save = () => {
@@ -507,14 +523,12 @@
 			`${__dirname}/data.json`, 
 			JSON.stringify({s: sessions, u: users, m: messages})
 		)
-		console.log(`saved!`);
 	}
 	process.on('exit', function () {
 		save()
 	});
 	process.on('SIGINT', function () {
 		process.exit(0);
-		console.log('sigint')
 	});
 
 	process.on('SIGTERM', function() {
@@ -522,7 +536,6 @@
 	});
 
 	process.once('SIGUSR2', function() {
-		console.log('SIGUSR2')
 		save()
     	process.kill(process.pid, 'SIGUSR2');
 	});
