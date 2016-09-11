@@ -1,4 +1,5 @@
 "use strict";
+let server
 (function() {
 	const http = require('http');
 	const url = require('url');
@@ -186,7 +187,7 @@
 						<h2>Sign up or log in to Taut</h2>
 						<p>${notice||''}</p>
 						<input type="text" name="nic" placeholder="username" autofocus>
-						<input type="password" name="password" placeholder="password">
+						<input type="password" name="pass" placeholder="password">
 						<input type="submit" class="btn" />
 						<p><small>Taut is a slack clone in 10K. View the 
 						<a href="//github.com/maxmcd/taut">source and info</a>. 
@@ -307,7 +308,7 @@
 
 	let getNic = (req) => {
 		var parts =  ("; " + req.headers.cookie).split("; session=");
-		if (parts.length == 2) return sessions[parts.pop().split(";").shift()];
+		if (parts.length == 2) return sessions[parts.pop().split(";").shift().trim()];
 	}
 
 	let nicResponse = (nic, resp, params, taken) => {
@@ -355,19 +356,14 @@
 		resp.writeHead((status||200), {'Content-Type': (contentType||'text/html')});
 	}
 
-	http.createServer(function (req, resp) {
+	server = http.createServer(function (req, resp) {
 
 		let urlParts = url.parse(req.url, true);
 		let path = urlParts.pathname;
 		let params = urlParts.query;
 
-		let forUser = path.match(/^@(.*)$/i)
-		if (forUser) forUser = forUser[1];
-
-		if (path === "/" || forUser) {
-
+		if (path === "/") {
 			if (req.method == "POST") {
-
 				req.on('data', (body) => {
 					let form = url.parse("?"+body.toString('utf8'), true).query
 
@@ -375,15 +371,15 @@
 					form.nic = form.nic.replace(/</g, '&lt;').replace(/>/g, '&gt;')
 
 					let notice
-					if (!form.nic || !form.password) {
+					if (!form.nic || !form.pass) {
 						notice = "Username or password can't be blank!"
 					} else {
 						// This is bad, do not hash like this, just use bcrypt
 						let hashedPass = users[form.nic]
-						if (hashedPass && !checkPassword(form.password, hashedPass)) {
+						if (hashedPass && !checkPassword(form.pass, hashedPass)) {
 							notice = "Incorrect password, or username is already taken!"
 						} else {
-							users[form.nic] = genPassword(form.password)
+							users[form.nic] = genPassword(form.pass)
 						}
 					}
 					if (notice) {
@@ -541,3 +537,5 @@
 	});
 
 })()
+
+module.exports = server

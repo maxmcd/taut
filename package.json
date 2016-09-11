@@ -13,9 +13,15 @@
     "gulp-gzip": "^1.4.0",
     "gulp-nodemon": "^2.1.0",
     "gulp-replace": "^0.5.4",
-    "gulp-uglify": "^2.0.0"
+    "gulp-uglify": "^2.0.0",
+    "mocha": "^3.0.2",
+    "should": "^11.1.0",
+    "supertest": "^2.0.0",
+    "supertest-session": "^2.0.1"
   },
-  "scripts": {},
+  "scripts": {
+    "test":"gulp build;rm dist/data.json; mocha tests/"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/maxmcd/taut.git"
