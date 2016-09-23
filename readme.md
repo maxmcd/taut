@@ -16,7 +16,8 @@ This project is not created by, affiliated with, or supported by Slack Technolog
  - Colorful user icons
  - Text formatting (bold, italic, strikethrough, blockquote, code)
  - Link detection
- - Message grouping
+ - 
+ - Visual message grouping
  - Chat and user list can work without javascript
  - Login sessions
  - Persisted data on server restart
@@ -59,3 +60,4 @@ I would be honored to receive any contributions. This is the first time I've bui
  - http://js1k.com/2010-first/details/704
  - http://stackoverflow.com/questions/3809401/what-is-a-good-regular-expression-to-match-a-url
  - https://www.owasp.org/index.php/XSS_Filter_Evasion_Cheat_Sheet
+ - http://wonko.com/post/html-escaping

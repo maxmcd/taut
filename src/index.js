@@ -229,7 +229,7 @@ let server
 	}
 	const templateFormatMessage = function (content) {
 		// sanitize
-		// this seems like enough, is this enough?
+		// This is bad: http://wonko.com/post/html-escaping
 		content = content
 			.replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
@@ -368,6 +368,7 @@ let server
 					let form = url.parse("?"+body.toString('utf8'), true).query
 
 					// sanitize
+                    // This is bad: http://wonko.com/post/html-escaping
 					form.nic = form.nic.replace(/</g, '&lt;').replace(/>/g, '&gt;')
 
 					let notice

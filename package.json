@@ -2,6 +2,7 @@
   "name": "Taut",
   "version": "1.0.0",
   "description": "My submission for the [10k Apart Challenge](https://a-k-apart.com/). A slack clone in 10k of js/html/css that works well in all modern browsers and without clientside javascript.",
+  "engines" : { "node" : ">=6.0" },
   "main": "index.js",
   "dependencies": {},
   "devDependencies": {
@@ -20,6 +21,7 @@
     "supertest-session": "^2.0.1"
   },
   "scripts": {
+    "start": "gulp watch",
     "test":"gulp build;rm dist/data.json; mocha tests/"
   },
   "repository": {
