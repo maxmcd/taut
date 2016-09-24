@@ -21,7 +21,7 @@
     "supertest-session": "^2.0.1"
   },
   "scripts": {
-    "start": "gulp watch",
+    "start": "node dist/index.js",
     "test":"gulp build;rm dist/data.json; mocha tests/"
   },
   "repository": {
