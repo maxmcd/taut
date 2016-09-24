@@ -514,7 +514,9 @@ let server
 
 	console.log(`Running on port ${port}`);
 
-	process.stdin.resume();
+	if (process.platform != 'win32') {
+	process.stdin.resume();		
+	}
 	let save = () => {
 		fs.writeFileSync(
 			`${__dirname}/data.json`, 
