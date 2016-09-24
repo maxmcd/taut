@@ -7,7 +7,7 @@ let server
 	const querystring = require('querystring');
 	const crypto = require('crypto');
 
-	const port = 8125
+	const port = process.env.port || 8125 
 	const littleLessThanOneMin = 58000;
 
 	const waiting = [];
