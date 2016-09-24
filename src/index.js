@@ -512,10 +512,11 @@ let server
 	}).listen(port);
 
 
-	console.log(`Running on port ${port}`);
+	console.log(`localhost:${port}`);
 
-	if (process.platform != 'win32') {
-	process.stdin.resume();		
+	let proc = process
+	if (proc.platform != 'win32') {
+		proc.stdin.resume();		
 	}
 	let save = () => {
 		fs.writeFileSync(
@@ -523,20 +524,20 @@ let server
 			JSON.stringify({s: sessions, u: users, m: messages})
 		)
 	}
-	process.on('exit', function () {
+	proc.on('exit', function () {
 		save()
 	});
-	process.on('SIGINT', function () {
-		process.exit(0);
+	proc.on('SIGINT', function () {
+		proc.exit(0);
 	});
 
-	process.on('SIGTERM', function() {
-    	process.exit(0);
+	proc.on('SIGTERM', function() {
+    	proc.exit(0);
 	});
 
-	process.once('SIGUSR2', function() {
+	proc.once('SIGUSR2', function() {
 		save()
-    	process.kill(process.pid, 'SIGUSR2');
+    	proc.kill(proc.pid, 'SIGUSR2');
 	});
 
 })()
