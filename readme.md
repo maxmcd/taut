@@ -16,7 +16,7 @@ This project is not created by, affiliated with, or supported by Slack Technolog
  - Colorful user icons
  - Text formatting (bold, italic, strikethrough, blockquote, code)
  - Link detection
- - 
+ - Browser reconnect and network status with exponential backoff
  - Visual message grouping
  - Chat and user list can work without javascript
  - Login sessions
@@ -58,6 +58,7 @@ I would be honored to receive any contributions. This is the first time I've bui
  - http://blog.johnkrauss.com/html-only-live-chat-No-JS/
  - http://codeflow.org/entries/2010/aug/25/javascript-compression-madness/
  - http://js1k.com/2010-first/details/704
- - http://stackoverflow.com/questions/3809401/what-is-a-good-regular-expression-to-match-a-url
  - https://www.owasp.org/index.php/XSS_Filter_Evasion_Cheat_Sheet
  - http://wonko.com/post/html-escaping
+ - http://stackoverflow.com/questions/3809401/what-is-a-good-regular-expression-to-match-a-url
+ - and many more that I have forgotten...

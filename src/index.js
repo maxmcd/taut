@@ -228,6 +228,7 @@ let server
 		return out
 	}
 	const templateFormatMessage = function (content) {
+
 		// sanitize
 		// This is bad: http://wonko.com/post/html-escaping
 		content = content
@@ -250,20 +251,22 @@ let server
 			`<blockquote>$1</blockquote>`
 		)
 
+		let start = "(^|\\s)("
+		let end = "[-a-zA-Z0-9@:%._\\+~#=]{2,256}\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%_\\+.~#?&\\/\\/=]*))"
+		let http = "https?:\\/\\/(www\\.)?"
 		// links
 		// http://stackoverflow.com/questions/3809401/what-is-a-good-regular-expression-to-match-a-url
 		content = content.replace(
-			/(^|\s)([-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&\/\/=]*))/gi,
+			new RegExp(start+end, "gi"),
 			`$1<a href="http://$2" target="_blank">$2</a>`
-		)
-		content = content.replace(
-			/(^|\s)(https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]+\b([-a-zA-Z0-9@:%_\+.~#?&\/\/=]*))/gi,
+		).replace(
+			new RegExp(start+http+end, "gi"),
 			`$1<a href="$2" target="_blank">$2</a>`
-		)
 
+		).replace(/\n/gi, "<br>")
 		// newlines
 		// replace \n with <br>
-		content = content.replace(/\n/gi, "<br>")
+
 		return content
 	}
 
