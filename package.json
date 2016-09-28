@@ -22,7 +22,7 @@
   },
   "scripts": {
     "start": "node dist/index.js",
-    "test":"gulp build;rm dist/data.json; mocha tests/"
+    "test":"gulp build;rm tests/data.json; mocha tests/"
   },
   "repository": {
     "type": "git",

@@ -1,11 +1,10 @@
-const app = require('../dist/index')
-let request = require('supertest');
+const app = require('./index')
+const request = require('supertest');
 const should = require('should');
 
 agent = request.agent(app);
 agent2 = request.agent(app);
 agent3 = request.agent(app);
-
 
 describe('Authentication and login tests', function() {
 

@@ -530,6 +530,7 @@ let server
 	proc.on('exit', function () {
 		save()
 	});
+	
 	proc.on('SIGINT', function () {
 		proc.exit(0);
 	});
