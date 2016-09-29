@@ -40,12 +40,6 @@ Run `npm install` to install dev dependencies.
 
 Run `gulp build` to build project in build directory. Final folder contents should be less than 10K. You can check by running `./bin/size.sh`
 
-**Build Notes:**
-
-The build uses babel (es2015) and uglify for all javascript files. Serverside code also has more aggressive whitespace removal to deal with all the whitespace in template strings. Server functions are also replaced with ES6 functions in certain places. 
-
-`./build.py` contains work-in-progress code for more aggressive size reduction based on methodologies used in js1k entries. This might be completed in the future to make space for more features. This build process would not be helpful for clientside code as gzip provides superior compression benefits. 
-
 ### Run
 
 Run `gulp watch` to run locally. 
