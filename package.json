@@ -2,9 +2,10 @@
   "name": "Taut",
   "version": "1.0.0",
   "description": "My submission for the [10k Apart Challenge](https://a-k-apart.com/). A slack clone in 10k of js/html/css that works well in all modern browsers and without clientside javascript.",
-  "engines" : { "node" : ">=6.0" },
+  "engines": {
+    "node": ">=6.0"
+  },
   "main": "index.js",
-  "dependencies": {},
   "devDependencies": {
     "babel-cli": "^6.11.4",
     "babel-preset-es2015": "^6.13.2",
@@ -18,11 +19,13 @@
     "mocha": "^3.0.2",
     "should": "^11.1.0",
     "supertest": "^2.0.0",
-    "supertest-session": "^2.0.1"
+    "supertest-session": "^2.0.1",
+	"escodegen": "^1.8.1",
+	"esprima": "^3.0.0"
   },
   "scripts": {
     "start": "node dist/index.js",
-    "test":"gulp build;rm dist/data.json; mocha tests/"
+    "test": "gulp build;rm tests/data.json; mocha tests/;"
   },
   "repository": {
     "type": "git",

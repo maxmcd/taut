@@ -7,6 +7,7 @@ const cleanCSS = require('gulp-clean-css');
 const gzip = require('gulp-gzip');
  
 const spawn = require('child_process').spawn;
+const exec = require('child_process').exec;
 
 gulp.task('server', function() {
     return gulp.src(['src/index.js'])
@@ -18,7 +19,8 @@ gulp.task('server', function() {
     .pipe(replace(/\\t|\\r|\\n/g, '')) // remove whitespace from template strings
     .pipe(replace("wellIsntthisunique", "/\\n/"))
     .pipe(replace(/function\(([a-z, ]+)\)/gi, '($1)=>'))
-    .pipe(gulp.dest('dist'));    
+    .pipe(gulp.dest('dist'))
+    .pipe(gulp.dest('tests'));
 })
 gulp.task('client', () => {
     return gulp.src(['src/client.js'])
@@ -39,7 +41,17 @@ gulp.task('size', () => {
     return spawn('./bin/size.sh', [], {stdio: "inherit"})
 })
 
-gulp.task('build', ['server', 'client', 'css']);
+gulp.task('gzip-index', ()=> {
+    let build = exec('node build.js', [], {stdio: "inherit"})
+    build.on('error', function(err) {
+        console.log(err)
+    })
+    return build
+})
+
+gulp.task('build', ['server', 'client', 'css'], function() {
+    exec('node build.js', [], {stdio: "inherit"})
+});
 
 gulp.task('watch', ['build'], function () {
     var stream =  nodemon({

@@ -371,7 +371,7 @@ let server
 					let form = url.parse("?"+body.toString('utf8'), true).query
 
 					// sanitize
-                    // This is bad: http://wonko.com/post/html-escaping
+					// This is bad: http://wonko.com/post/html-escaping
 					form.nic = form.nic.replace(/</g, '&lt;').replace(/>/g, '&gt;')
 
 					let notice
@@ -514,7 +514,6 @@ let server
 		}
 	}).listen(port);
 
-
 	console.log(`localhost:${port}`);
 
 	let proc = process
@@ -530,17 +529,18 @@ let server
 	proc.on('exit', function () {
 		save()
 	});
+	
 	proc.on('SIGINT', function () {
 		proc.exit(0);
 	});
 
 	proc.on('SIGTERM', function() {
-    	proc.exit(0);
+		proc.exit(0);
 	});
 
 	proc.once('SIGUSR2', function() {
 		save()
-    	proc.kill(proc.pid, 'SIGUSR2');
+		proc.kill(proc.pid, 'SIGUSR2');
 	});
 
 })()
