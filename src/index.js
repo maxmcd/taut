@@ -83,6 +83,7 @@ let server
 
 		let inputAttributes = `
 			autofocus id="message-input" 
+			name="message-input"
 			placeholder="Message #general" 
 			autocorrect="off" 
 			autocomplete="off" 
@@ -93,14 +94,14 @@ let server
 			<div id="client-ui">
 				<header>
 					<div id="team_menu">
-						<span id="tn">Taut</span>
+						<h1 id="tn">Taut</h1>
 						<li class="usr">
 							<span class="presence active"></span>
 							${nic}
 						</li>
 					</div>
 					<div id="ch">
-						<div id="ct">#general</div>
+						<h1 id="ct">#general</h1>
 						<div id="chi">${members} members</div>
 						<a href="/signout" id="so">sign out</a>
 					</div>
@@ -108,10 +109,12 @@ let server
 				<div id="f">
 					<div id="mic">
 						<form action="/message" method="post" target="" id="message-form" onsubmit="newMessage();return false;">
+							<label class="hidden" for="message-input">Send Message</label>
 							<noscript>
 								<input name="message" ${inputAttributes}/>
 							</noscript>
-							<textarea ${inputAttributes} /></textarea>
+							<textarea hidden ${inputAttributes} /></textarea>
+							<input class="hidden" type="submit" value="submit">
 						</form>
 					</div>
 				</div>
@@ -134,7 +137,7 @@ let server
 								<iframe id="m" name="mc" src="/messages?id=${Math.random()}#l" frameborder="0"></iframe>
 							</noscript>
 							<div id="mc">
-								<div id="cd">Connection lost. Reconnecting...</div>
+								<div id="cd" hidden >Connection lost. Reconnecting...</div>
 								<div id="msd">
 									<div>
 										<div id="dc">
@@ -186,7 +189,9 @@ let server
 					<form method="post">
 						<h2>Sign up or log in to Taut</h2>
 						<p>${notice||''}</p>
+						<label for="nic">Username</label>
 						<input type="text" name="nic" placeholder="username" autofocus>
+						<label for="pass">Password</label>
 						<input type="password" name="pass" placeholder="password">
 						<input type="submit" class="btn" />
 						<p><small>Taut is a slack clone in 10K. View the 
@@ -278,7 +283,7 @@ let server
 		let gutter = `
 			<div class="mg">
 				<div class="mi">
-					<span 
+					<span aria-hidden="true" 
 						style="background-color: #${colors[sender[0].toLowerCase()] || "ccc"}"
 						class="memi">
 							${sender[0]}
@@ -287,7 +292,7 @@ let server
 			</div>
 		`
 		let meta = `
-		<span class="member">${sender}</span>&nbsp;
+		<b class="member">${sender}</b>&nbsp;
 		<span class="timestamp" data-ts="${message.ts}"></span>
 		`
 
@@ -364,7 +369,6 @@ let server
 		let urlParts = url.parse(req.url, true);
 		let path = urlParts.pathname;
 		let params = urlParts.query;
-
 		if (path === "/") {
 			if (req.method == "POST") {
 				req.on('data', (body) => {
@@ -409,7 +413,7 @@ let server
 			resp.writeHead(302, {
 				'Content-Type': 'text/html',
 				'Set-Cookie':`session=`,
-				'Location':'/',
+				'Location':`http://${req.headers.host}/`,
 			});
 			resp.end()
 

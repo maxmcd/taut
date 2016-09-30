@@ -20,7 +20,7 @@
     }
 
     var saveMyself = function(delay) {
-        cd.style.display = "initial"
+        cd.hidden = false
         delay = delay * 2 + 1
         var url = "/ping",
             xhr = new XMLHttpRequest();
@@ -28,7 +28,7 @@
         xhr.onreadystatechange = function() {
             if (xhr.readyState === 4) {
                 if (xhr.status === 200) {
-                    cd.style.display = "none"
+                    cd.hidden = true
                     getMessages()
                     checkIsNewMessage()
                 } else {

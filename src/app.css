@@ -25,6 +25,10 @@ textarea, input {
     font-family: "Helvetica Neue",Helvetica,"Segoe UI",Tahoma,Arial,sans-serif;
 }
 
+.hidden {
+	display: none;
+}
+
 .scrollY {
 	overflow-y: scroll;
 }
@@ -35,6 +39,10 @@ textarea, input {
 
 body.signup {
     background: #f9f9f9;
+}
+
+.card form label {
+	display: none;
 }
 
 #so {
@@ -200,6 +208,7 @@ li.usr.active {
 }
 
 #ct {
+	margin: 0px;
     padding: 0 .1rem 0 1.3rem;
     color: #2c2d30;
     font-weight: 900;
@@ -209,6 +218,8 @@ li.usr.active {
 }
 #tn {
     font-weight: 900;
+    margin: 0px;
+    display: inline;
 }
 
 #team_menu #tn {
@@ -237,6 +248,10 @@ li.usr.active {
 	position: relative;
 	margin: 0;
 	height: 42px;
+}
+
+#ms {
+	display: none;
 }
 
 #message-input {
@@ -464,7 +479,6 @@ ts-message {
 }
 
 #cd {
-    display: none;
     color: #fff;
     text-align: center;
     font-size: .9rem;
