@@ -72,3 +72,23 @@ describe("Password hashing", function() {
 		done();
 	})
 })
+
+let messageTests = [
+	["hi" , "<p>hi</p>"],
+	["hi\nhi" , "<p>hi</p><p>hi</p>"],
+	["this is *bold*" , "<p>this is <b>bold</b></p>"],
+	["this id _*bold and italic*_" , "<p>this id <i><b>bold and italic</b></i></p>"],
+	["hi\n> blockquote\nhi" , "<p>hi</p><blockquote> blockquote</blockquote><p>hi</p>"],
+	["this `is code` stuff" , "<p>this <code>is code</code> stuff</p>"],
+]
+describe("Message formatting", function() {
+	it("Should be able to pass all the message examples", function(done) {
+		messageTests.forEach((test) => {
+			should.equal(
+				test[1], 
+				templateFormatMessage(test[0])
+			)
+		})
+		done();
+	})
+})

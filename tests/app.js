@@ -76,22 +76,4 @@ describe('Authentication and login tests', function() {
         });
     })
 
-
-    it('Should be able to send formatted message', function(done) {
-        agent.post('/message')
-        .send("message=>+*bold*+_italic_+~strikethrough~")
-        .expect(302)
-        .expect('Location', '/')
-        .end(function(err, res) {
-            agent.get('/messages.json')
-            .expect(200)
-            .end(function(err, res) {
-                res.body.msgs[1].should.match(
-                    /<blockquote> <b>bold<\/b><i>italic<\/i><strike>strikethrough<\/strike><\/blockquote>/
-                )
-                done(err);
-            });
-        });
-    })
-
 })

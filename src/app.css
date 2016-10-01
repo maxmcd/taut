@@ -388,9 +388,11 @@ textarea {
 }
 
 .member {
+	font-size: 15px;
 	font-weight: 900;
 	color: #2c2d30;
 	line-height: 1.125rem;
+	display: inline;
 }
 
 .mi {
@@ -428,7 +430,7 @@ textarea {
 	cursor: text;
 
 	/* just when every message shows an avatar */
-
+	margin: 0px;
 	margin-top: -.125rem;
 
 }
@@ -442,6 +444,9 @@ blockquote {
 .mco {
 	margin-top: .0625rem;
 	margin-left: 4.5rem;
+}
+.mco p {
+	margin: 0px;
 }
 
 .mco a {

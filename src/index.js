@@ -138,7 +138,7 @@ let server
 							</noscript>
 							<div id="mc">
 								<div id="cd" hidden >Connection lost. Reconnecting...</div>
-								<div id="msd">
+								<div id="msd" aria-role="main">
 									<div>
 										<div id="dc">
 											<div id="dm">
@@ -213,7 +213,7 @@ let server
 		return getHtml(`
 			<body class="scrollY">
 			<div id="iframe_body">
-				<div id="msg_div">
+				<div id="msg_div" aria-role="main>
 					<div class="dc">
 						<div id="dm">
 						${messageBody}${cts}
@@ -233,7 +233,7 @@ let server
 		return out
 	}
 	const templateFormatMessage = function (content) {
-
+		let input = content;
 		// sanitize
 		// This is bad: http://wonko.com/post/html-escaping
 		content = content
@@ -243,10 +243,10 @@ let server
 
 		// formatting
 		for (let key in rpl) {
-			let re = new RegExp(`(\\s?)${key}(.*?)${key}($|\\s)`,"gmi");
+			let re = new RegExp(`${key}(.*?)${key}`,"gi");
 			content = content.replace(
 				re,
-				`$1<${rpl[key]}>$2</${rpl[key]}>`
+				`<${rpl[key]}>$1</${rpl[key]}>`
 			)
 		}
 
@@ -268,11 +268,19 @@ let server
 			new RegExp(start+http+end, "gi"),
 			`$1<a href="$2" target="_blank">$2</a>`
 
-		).replace(/\n/gi, "<br>")
+		)
+		let lines = content.split(/\n/)
+		lines = lines.map((line) => {		
+			if (line.substring(0,3) !== "<bl") {
+				line = `<p>${line}</p>`
+			}
+			return line
+		})
+		
 		// newlines
 		// replace \n with <br>
-
-		return content
+		// console.log(JSON.stringify(input), ",", JSON.stringify(lines.join("")))
+		return lines.join("")
 	}
 
 	const templateMessage = function (message, last) {
@@ -292,7 +300,7 @@ let server
 			</div>
 		`
 		let meta = `
-		<b class="member">${sender}</b>&nbsp;
+		<h3 class="member" aria-label="username">${sender}</h3>&nbsp;
 		<span class="timestamp" data-ts="${message.ts}"></span>
 		`
 
