@@ -368,6 +368,7 @@ iframe#m {
 }
 textarea {
     display: none;
+    position: absolute;
 }
 
 

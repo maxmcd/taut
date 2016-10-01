@@ -277,10 +277,10 @@ let server
 			return line
 		})
 		
-		// newlines
-		// replace \n with <br>
+		content = lines.join("")
+		content = content.replace(/<p><\/p>/gi, "<br>")
 		// console.log(JSON.stringify(input), ",", JSON.stringify(lines.join("")))
-		return lines.join("")
+		return content
 	}
 
 	const templateMessage = function (message, last) {
